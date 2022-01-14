@@ -1,0 +1,27 @@
+server:
+  port: 8081
+# Spring Boot configuration
+spring:
+  thymeleaf:
+    prefix: file:src/main/resources/templates/
+    cache: false
+  # Database
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/callboardBase
+    username: postgres
+    password: qwerty
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    resources:
+      static-locations: [ classpath:/resources/, classpath:/static/ ]
+      chain:
+        strategy:
+          content:
+            paths: /**
+            enabled: true
+
+
+
