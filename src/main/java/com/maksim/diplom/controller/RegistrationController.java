@@ -2,6 +2,7 @@ package com.maksim.diplom.controller;
 
 import com.maksim.diplom.entity.User;
 import com.maksim.diplom.repos.UserRepo;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -89,9 +90,16 @@ public class RegistrationController {
             LOG.error("Email \"" + user.getName() + "\" already exist.");
             return "signup.html";
         }
+        EmailValidator emailValidator = EmailValidator.getInstance();
+        if(!emailValidator.isValid(user.getEmail())){
+            LOG.error("Wrong email address.");
+            return "signup.html";
+        }
         LOG.info("User " + user.getLogin() + " is registered.");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
         return "redirect:/authorization";
     }
+
+
 }

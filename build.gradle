@@ -45,6 +45,7 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation('log4j:log4j:1.2.17')
 	implementation('org.testng:testng:6.9.6')
+	implementation 'commons-validator:commons-validator:1.7'
 	runtimeOnly 'org.postgresql:postgresql'
 //	compileOnly 'org.projectlombok:lombok'
 //	annotationProcessor 'org.projectlombok:lombok'
