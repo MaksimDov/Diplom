@@ -39,8 +39,16 @@
 <div style="width: 20vw; height: 20vw; position: absolute; top: 17vw; left: 40vw; right: 50vw">
     <form th:action="@{/signup}" method="post">
         <div class="form-group">
-            <label>login</label>
-            <input type="text" class="form-control" name="username" placeholder="Имя любимое моё">
+            <label>Name</label>
+            <input type="text" class="form-control" name="name" placeholder="Имя">
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="text" class="form-control" name="email" placeholder="Почта">
+        </div>
+        <div class="form-group">
+            <label>Login</label>
+            <input type="text" class="form-control" name="login" placeholder="Логин">
         </div>
         <div class="form-group">
             <label>Password</label>

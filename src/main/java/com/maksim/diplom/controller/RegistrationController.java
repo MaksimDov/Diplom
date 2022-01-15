@@ -81,14 +81,13 @@ public class RegistrationController {
     public String signUpNewUser(User user, Model model) {
         User userFromDb = userRepo.findByLogin(user.getLogin());
         if (userFromDb != null) {
-            if(Objects.equals(userFromDb.getLogin(), user.getLogin())) {
-                LOG.error("Login \"" + user.getName() + "\" already exist.");
-                return "signup.html";
-            }
-            else if(Objects.equals(userFromDb.getEmail(), user.getEmail())){
-                LOG.error("Email \"" + user.getEmail() + "\" already exist.");
-                return "signup.html";
-            }
+            LOG.error("Login \"" + user.getName() + "\" already exist.");
+            return "signup.html";
+        }
+        userFromDb = userRepo.findByEmail(user.getEmail());
+        if (userFromDb != null) {
+            LOG.error("Email \"" + user.getName() + "\" already exist.");
+            return "signup.html";
         }
         LOG.info("User " + user.getLogin() + " is registered.");
         user.setPassword(passwordEncoder.encode(user.getPassword()));

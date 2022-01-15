@@ -2,6 +2,8 @@ server:
   port: 8081
 # Spring Boot configuration
 spring:
+  main:
+    allow-circular-references: true
   thymeleaf:
     prefix: file:src/main/resources/templates/
     cache: false
