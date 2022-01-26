@@ -25,12 +25,6 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
 
-<div style="width: 100vw; position: absolute; top: 3vh;">
-    <h1 h1-expand-lg th:inline="text" style="font-size: 45vw; font-family: revert; margin-top: -3vh">Hello</h1>
-    <input type="button" class="btn btn-warning rounded-circle"
-           style="transform:rotate(-90deg); position: absolute; top: 23.7vw; left: 79.3vw; width:18.6vw; height:13.2vw; font-size: 5vw"
-           value="Начать" onclick="document.location='/playrooms'">
-</div>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
     <a class="navbar-brand" href="#" style="color: white">Мафия</a>
@@ -51,15 +45,31 @@
             <li class="nav-item active">
                 <form th:action="@{/logout}" method="post">
                     <input type="submit"
-                           value="Лагает, он же - LogOut, он же - SignOut, также в нашей стране известен как просто ВЫХОД"
+                           value="ВЫХОД"
                            style="margin-top: 0.8%; background-color: #343940; color: white; border: 0"/>
                 </form>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" th:placeholder="'Здравствуй, ' + ${user.username} + '!'">
+<!--            <input class="form-control mr-sm-2" type="search" th:placeholder="'Здравствуй, ' + ${user.username} + '!'">-->
         </form>
     </div>
 </nav>
+
+
+
+
+<h1>HOME</h1>
+
+<div style="width: 20vw; height: 20vw; position: absolute; top: 17vw; left: 40vw; right: 50vw">
+    <form th:action="@{/addAdvertFromHome}" method="post">
+
+        <button type="submit" class="btn btn-primary">Разместить объявление</button>
+    </form>
+</div>
+
+
+
+
 </body>
 </html>

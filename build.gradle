@@ -47,8 +47,6 @@ dependencies {
 	implementation('org.testng:testng:6.9.6')
 	implementation 'commons-validator:commons-validator:1.7'
 	runtimeOnly 'org.postgresql:postgresql'
-//	compileOnly 'org.projectlombok:lombok'
-//	annotationProcessor 'org.projectlombok:lombok'
 	compileOnly('org.projectlombok:lombok:1.18.10')
 	annotationProcessor('org.projectlombok:lombok:1.18.10')
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

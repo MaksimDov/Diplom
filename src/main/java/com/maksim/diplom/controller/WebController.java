@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.maksim.diplom.entity.User;
 import com.maksim.diplom.repos.UserRepo;
@@ -64,10 +65,33 @@ public class WebController {
             return "redirect:/signup";
         else if (!cookies[0].getName().equals("userId"))
             return "redirect:/signup";
-        User userRepoById = userRepo.findByLoginOrId(null, Long.parseLong(cookies[0].getValue()));
+        User userRepoById = userRepo.findById(Long.parseLong(cookies[0].getValue()));
         userRepoById.setPassword(null);
         model.addAttribute("user", userRepoById);
+        System.out.println(userRepoById.toString());
+        System.out.println(cookies[0].getValue());
         return "home.html";
+    }
+
+
+
+
+    @RequestMapping("/addAdvertFromHello")
+    public String addAdvertFromHelloPageView(Model model, HttpServletRequest request) {return "redirect:/authorization";}
+
+    @RequestMapping("/addAdvertFromHome")
+    public String addAdvertFromHomePageView(Model model, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+            if (cookie.getName().equals("userId")) {
+                cookies[0] = cookie;
+                break;
+            }
+        if (request.getCookies() == null)
+            return "redirect:/signup";
+        else if (!cookies[0].getName().equals("userId"))
+            return "redirect:/signup";
+        return "addAdvert.html";
     }
 
 }

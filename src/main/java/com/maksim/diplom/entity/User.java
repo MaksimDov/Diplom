@@ -33,4 +33,8 @@ public class User {
      * Поле почты.
      */
     private String email;
+
+    public String toString(){
+        return "Name: " + name + "\nLogin: " + login + "\nEmail: " + email + "\nPassword: " + password + "\n";
+    }
 }

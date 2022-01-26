@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
@@ -52,7 +53,7 @@ public class RegistrationController {
             LOG.error("Wrong username or password.");
             return "/authorization.html";
         }
-        LOG.info("User " + user.getName() + " authorized.");
+        LOG.info("User " + user.getLogin() + " authorized.");
         Cookie cookie = new Cookie("userId", userRepoByLoginOrEmail.getId().toString());
         response.addCookie(cookie);
         return "redirect:/home";
@@ -102,4 +103,16 @@ public class RegistrationController {
     }
 
 
+//    @PostMapping("/signOut")
+//    public String signOut(HttpServletRequest request, HttpServletResponse response){
+//        Cookie[] cookies = request.getCookies();
+//        if (cookies != null)
+//            for (Cookie cookie : cookies) {
+//                cookie.setValue("");
+//                cookie.setPath("/");
+//                cookie.setMaxAge(0);
+//                response.addCookie(cookie);
+//            }
+//        return "hello.html";
+//    }
 }
