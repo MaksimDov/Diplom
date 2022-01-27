@@ -46,6 +46,7 @@ dependencies {
 	implementation('log4j:log4j:1.2.17')
 	implementation('org.testng:testng:6.9.6')
 	implementation 'commons-validator:commons-validator:1.7'
+	implementation 'net.iharder:base64:2.3.9'
 	runtimeOnly 'org.postgresql:postgresql'
 	compileOnly('org.projectlombok:lombok:1.18.10')
 	annotationProcessor('org.projectlombok:lombok:1.18.10')

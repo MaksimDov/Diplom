@@ -68,8 +68,6 @@ public class WebController {
         User userRepoById = userRepo.findById(Long.parseLong(cookies[0].getValue()));
         userRepoById.setPassword(null);
         model.addAttribute("user", userRepoById);
-        System.out.println(userRepoById.toString());
-        System.out.println(cookies[0].getValue());
         return "home.html";
     }
 
