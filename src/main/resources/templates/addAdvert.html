@@ -39,6 +39,8 @@
         </form>
     </div>
 </nav>
+
+
 <h1>AddAdvert</h1>
 <div style="width: 20vw; height: 20vw; position: absolute; top: 17vw; left: 40vw; right: 50vw">
     <form th:action="@{/saveAdvert}" method="post" enctype="multipart/form-data">
@@ -57,6 +59,14 @@
         <div class="form-group">
             <label>City</label>
             <input required type="text" class="form-control" name="city" placeholder="Город">
+        </div>
+        <div class="form-group">
+            <select size="3" multiple name="tags[]" id="tags[]" style="width: 20vw">
+                <option disabled>Выберите теги объявления</option>
+                <option value="Job">Работа</option>
+                <option selected value="Cars">Автомобили</option>
+                <option value="Appliances">Бытовая техника</option>
+            </select></p>
         </div>
         <button type="submit" class="btn btn-primary">Добавить</button>
     </form>

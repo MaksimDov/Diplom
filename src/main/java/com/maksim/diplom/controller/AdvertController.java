@@ -1,11 +1,11 @@
 package com.maksim.diplom.controller;
 
-import bsh.commands.dir;
 import com.maksim.diplom.entity.Advert;
 import com.maksim.diplom.entity.Picture;
-import com.maksim.diplom.entity.User;
+import com.maksim.diplom.entity.Tags;
 import com.maksim.diplom.repos.AdvertRepo;
 import com.maksim.diplom.repos.PicturesRepo;
+import com.maksim.diplom.repos.TagsRepo;
 import com.mortennobel.imagescaling.ResampleOp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +39,8 @@ public class AdvertController {
     private AdvertRepo advertRepo;
     @Autowired
     private PicturesRepo picturesRepo;
+    @Autowired
+    private TagsRepo tagsRepo;
 
 
     /**
@@ -47,7 +49,7 @@ public class AdvertController {
      * @return view signup.html or redirect:/authorization
      */
     @PostMapping("/saveAdvert")
-    public String saveAdvert(Advert advert, Model model, @RequestParam("picture") MultipartFile[] file, HttpServletRequest request) throws IOException {
+    public String saveAdvert(Advert advert, Model model, @RequestParam("picture") MultipartFile[] file, @RequestParam("tags[]") String[] tags,  HttpServletRequest request) throws IOException {
         Cookie[] cookies = request.getCookies();
         advert.setUserId(Long.parseLong(cookies[0].getValue()));
         advertRepo.save(advert);
@@ -57,6 +59,14 @@ public class AdvertController {
             for (MultipartFile m : file) {
                 writeFile(advertId, m, count);
                 ++count;
+            }
+        }
+        if (!tags[0].isEmpty()) {
+            for (String s : tags) {
+                Tags tagsEnt = new Tags();
+                tagsEnt.setAdvertId(advertId);
+                tagsEnt.setName(s);
+                tagsRepo.save(tagsEnt);
             }
         }
         return "redirect:/home";
@@ -102,14 +112,16 @@ public class AdvertController {
 //        }
     }
 
-    public static boolean delAllFile(String path) {
-        boolean flag = false;
+    /**
+     * @param path is path to dir
+     */
+    public static void delAllFile(String path) {
         File file = new File(path);
         if (!file.exists()) {
-            return flag;
+            return;
         }
         if (!file.isDirectory()) {
-            return flag;
+            return;
         }
         String[] tempList = file.list();
         File temp = null;
@@ -124,10 +136,8 @@ public class AdvertController {
             }
             if (temp.isDirectory()) {
                 delAllFile(path + "/" + tempList[i]); // Сначала удалите файлы в папке
-                flag = true;
             }
         }
-        return flag;
 
     }
 }
