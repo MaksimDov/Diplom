@@ -21,5 +21,5 @@ public class Tags {
     /**
      * Поле идентификатора объявления.
      */
-    private Long AdvertId;
+    private Long advertId;
 }

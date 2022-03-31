@@ -3,12 +3,12 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath('org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE')
+		classpath('org.springframework.boot:spring-boot-gradle-plugin:2.6.5')
 	}
 }
 
 plugins {
-	id 'org.springframework.boot' version '2.6.2'
+	id 'org.springframework.boot' version '2.6.3'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	id 'idea'
@@ -48,6 +48,7 @@ dependencies {
 	implementation 'commons-validator:commons-validator:1.7'
 	implementation 'net.iharder:base64:2.3.9'
 	implementation 'com.mortennobel:java-image-scaling:0.8.6'
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 	runtimeOnly 'org.postgresql:postgresql'
 	compileOnly('org.projectlombok:lombok:1.18.10')
 	annotationProcessor('org.projectlombok:lombok:1.18.10')

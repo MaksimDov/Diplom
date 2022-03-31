@@ -1,5 +1,6 @@
 package com.maksim.diplom.controller;
 
+import com.maksim.diplom.repos.AdvertRepo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,10 +26,12 @@ public class WebController {
      */
     private static final Logger LOG = Logger.getLogger(WebController.class.getName());
     /**
-     * Поле подключения репозитория для взамимодействия пользвателя с БД.
+     * Поля подключения репозитория для взамимодействия пользвателя с БД.
      */
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private AdvertRepo advertRepo;
 
 
     /**
@@ -92,4 +95,46 @@ public class WebController {
         return "addAdvert.html";
     }
 
+
+    /**
+     * Отображение страницы со списком комнат.
+     * @return view viewAdvert.html
+     */
+    @GetMapping("/viewAdverts")
+    public String playroom() {
+        return "viewAdverts.html";
+    }
+
+    /**
+     * Отображение игровой комнаты.
+     * Так же осущствляет проверку на то, авторизировался ли пользователь, а также есть ли он в этой комнате:
+     * - если да:  отображает страницу игровой комнаты [letsPlay.html];
+     * - если нет: возвращает на страницу авторизации (пользователь не авторизован) [redirect:/signup]
+     * или на страницу со списком комнат [redirect:/playrooms].
+     *
+     * @param model      to view page
+     * @param advertId the room number
+     * @param request    to get Cookies
+     * @return view letsPlay.html redirect:/signup or redirect:/playrooms
+     */
+    @RequestMapping("/viewAdverts/{advertId}")
+    public String roomId(Model model, @PathVariable(value = "advertId") Long advertId, HttpServletRequest request) {
+//        Cookie[] cookies = request.getCookies();
+//        for (Cookie cookie : cookies) {
+//            if (cookie.getName().equals("userId")) {
+//                cookies[0] = cookie;
+//                break;
+//            }
+//        }
+//        if (request.getCookies() == null)
+//            return "redirect:/signup";
+//        else if (!cookies[0].getName().equals("userId"))
+//            return "redirect:/signup";
+        if (advertRepo.findById(advertId).isPresent()) {
+            return "singleAdvert.html";
+        } else {
+            LOG.error("Advert does not exist");
+            return "redirect:/viewAdverts";
+        }
+    }
 }

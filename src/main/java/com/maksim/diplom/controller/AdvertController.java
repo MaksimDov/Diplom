@@ -1,15 +1,12 @@
 package com.maksim.diplom.controller;
 
-import com.maksim.diplom.entity.Advert;
-import com.maksim.diplom.entity.Picture;
-import com.maksim.diplom.entity.Tags;
-import com.maksim.diplom.repos.AdvertRepo;
-import com.maksim.diplom.repos.PicturesRepo;
-import com.maksim.diplom.repos.TagsRepo;
+import com.maksim.diplom.entity.*;
+import com.maksim.diplom.repos.*;
 import com.mortennobel.imagescaling.ResampleOp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +23,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Класс-контроллер для объявлений.
@@ -41,7 +42,8 @@ public class AdvertController {
     private PicturesRepo picturesRepo;
     @Autowired
     private TagsRepo tagsRepo;
-
+    @Autowired
+    private UserRepo userRepo;
 
     /**
      * @param advert it receives data from forms
@@ -79,12 +81,12 @@ public class AdvertController {
     public void writeFile(Long adId, MultipartFile multipartFile, Integer count) throws IOException {
         String type = multipartFile.getContentType().substring(6);
         String name = adId + "-" + count + "." + type;
-        Path filepath = Paths.get("./src/main/resources/tempPicture", name);
+        Path filepath = Paths.get("./src/main/resources/static/tempPicture", name);
         try (OutputStream os = Files.newOutputStream(filepath)) {
             os.write(multipartFile.getBytes());
         }
 
-        File file = new File("./src/main/resources/tempPicture/" + name);
+        File file = new File("./src/main/resources/static/tempPicture/" + name);
         BufferedImage originalBufferedImage = ImageIO.read(file);
         ResampleOp resamOp = new ResampleOp(100, 100);
         BufferedImage modifiedImage = resamOp.filter(originalBufferedImage, null);
@@ -95,21 +97,10 @@ public class AdvertController {
 
         Picture pic = new Picture();
         pic.setAdvertId(adId);
-        pic.setPicture(Base64.getEncoder().encodeToString(baos.toByteArray()));
+        pic.setPicture(String.valueOf(filepath).substring(27));
         picturesRepo.save(pic);
 
-        delAllFile("./src/main/resources/tempPicture/");
-
-
-        //разобраться с очисткой папки
-
-
-        //Декодирование с сохранением в папку(для другого метода)
-//        byte[] decoded = Base64.getDecoder().decode(Base64.getEncoder().encodeToString(file.getBytes()));
-//        Path filepath = Paths.get("/home/maksim/Documents/Diplom/diplom/src/main/resources/tempPicture", file.getOriginalFilename());
-//        try (OutputStream os = Files.newOutputStream(filepath)) {
-//            os.write(decoded);
-//        }
+//        delAllFile("./src/main/resources/tempPicture/");
     }
 
     /**
@@ -138,6 +129,5 @@ public class AdvertController {
                 delAllFile(path + "/" + tempList[i]); // Сначала удалите файлы в папке
             }
         }
-
     }
 }
