@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,8 +34,8 @@ import java.util.stream.Collectors;
  * @version v1.0
  */
 @RestController
-@RequestMapping("/viewAdverts")
-public class ViewController {
+@RequestMapping("/viewAuthorisedAdverts")
+public class ViewAuthorisedController {
     /**
      * Поля подключения репозитория для взамимодействия пользвателя с БД.
      */
@@ -113,7 +115,7 @@ public class ViewController {
 //                cookies[0] = cookie;
 //                break;
 //            }
-        return "/viewAdverts/" + advertId;
+        return "/viewAuthorisedAdverts/" + advertId;
     }
 
     /**
@@ -126,11 +128,22 @@ public class ViewController {
      */
     @GetMapping("/{advertId}/updateSingleAdvert")
     public String viewSingleAd(@PathVariable("advertId") Long advertId, HttpServletRequest request, Model model) throws NoEntityException {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+            if (cookie.getName().equals("userId")) {
+                cookies[0] = cookie;
+                break;
+            }
+        User userRepoById = userRepo.findByLoginOrId(null, Long.parseLong(cookies[0].getValue()));
         Advert advert = advertRepo.findById(advertId).orElseThrow(() -> new NoEntityException(advertId));
+        String owner = "false";
         String userName = "";
         String adName = "";
         String adDescription;
         User userNow = userRepo.findById(advert.getUserId()).orElseThrow(() -> new NoEntityException(advert.getUserId()));
+        if (userRepoById.getId() == userNow.getId()){
+            owner = "true";
+        }
         userName = userNow.getName();
         adName = advert.getName();
         adDescription = advert.getDescription();
@@ -149,6 +162,7 @@ public class ViewController {
         resultJson.put("userName", userName);
         resultJson.put("adName", adName);
         resultJson.put("adDescription", adDescription);
+        resultJson.put("owner", owner);
         resultJson.put("tags", jsonArray);
         resultJson.put("pictures", picArray);
 //        System.out.println(resultJson.toString());
@@ -169,5 +183,30 @@ public class ViewController {
         resultJson.put("pictures", picArray);
 //        System.out.println(resultJson.toString());
         return resultJson.toString();
+    }
+
+    /**
+     * Метод удаления всех объектов комнат по номеру из БД, где пользователь является хостом
+     * (в противном случае не работает [/playrooms/ + roomNumber]).
+     * Удалить комнату возможно только в момент регистрации.
+     * После начала игры эта возможность пропадает до следующего времени регистрации после окончания текущей игры.
+     *
+     * @param advertId the room number
+     * @param request    to get Cookies [to find user by id]
+     * @param model      the model
+     * @return /playrooms or /playrooms/ + roomNumber
+     */
+    @GetMapping("/{advertId}/delete")
+    public String deleteAdvert(@PathVariable("advertId") Long advertId, HttpServletRequest request, Model model) {
+        List<Picture> picList = picturesRepo.findAllByAdvertId(advertId);
+        for(Picture pic : picList){
+            File file = new File("./src/main/resources/static" + pic.getPicture());
+            file.delete();
+        }
+        tagsRepo.deleteAllByAdvertId(advertId);
+        picturesRepo.deleteAllByAdvertId(advertId);
+        advertRepo.deleteAllById(advertId);
+        return "/viewAuthorisedAdverts";
+
     }
 }

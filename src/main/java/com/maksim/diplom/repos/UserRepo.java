@@ -29,12 +29,20 @@ public interface UserRepo extends JpaRepository<User, Long> {
     User findByLoginOrId(String login, Long id);
 
     /**
-     * Find user by login.
+     * Find user by email.
      *
-     * @param login the user's login
+     * @param email the user's email
      * @return the user
      */
-    User findByEmail(String login);
+    User findByEmail(String email);
+
+    /**
+     * Find user by phone number.
+     *
+     * @param phone the user's phone number
+     * @return the user
+     */
+    User findByPhoneNumber(String phone);
 
     /**
      * Find user by email.

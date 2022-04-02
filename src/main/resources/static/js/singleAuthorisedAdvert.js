@@ -13,6 +13,12 @@ function changePic() {
     })
 }
 
+function deleteAdvert() {
+    $.get(location.href + '/delete').then(function (data) {
+        document.location = data
+    });
+}
+
 
 function viewSingle() {
     $.get(location.href + '/updateSingleAdvert').then(function (adView) {
@@ -20,13 +26,14 @@ function viewSingle() {
             $('#advertsList').empty();
             var element = document.getElementById('advertsList');
             var fragment = document.createDocumentFragment();
-            var setUserName, setAdName, setAdDescription, setTags, setAdId;
+            var setUserName, setAdName, setAdDescription, setTags, setAdId, owner;
             var parsed = JSON.parse(adView);
 
             setUserName = parsed.userName;
             setAdName = parsed.adName;
             setAdDescription = parsed.adDescription;
             setAdId = parsed.adId;
+            owner = parsed.owner;
             setTags = "";
             parsed.tags.forEach((el) => {
                 setTags = setTags + el + " ";
@@ -55,6 +62,18 @@ function viewSingle() {
             }
             picFrag.appendChild(picElement);
             element.appendChild(picFrag);
+            if(owner === "true") {
+                var deleteElement = document.createElement('button');
+                buttonElement.className = "btn";
+                buttonElement.type = "submit";
+                buttonElement.id = "del";
+                deleteElement.onclick = function () {
+                    deleteAdvert(this);
+                    // alert("del" + this.id);
+                };
+                deleteElement.textContent = "delete";
+                element.appendChild(deleteElement);
+            }
         }
     });
 }

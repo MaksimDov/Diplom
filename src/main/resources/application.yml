@@ -18,7 +18,7 @@ spring:
       ddl-auto: update
     show-sql: false
     resources:
-      static-locations: [ classpath:/resources/, classpath:/static/, clsspath:/tempPicture/ ]
+      static-locations: [ classpath:/resources/, classpath:/static/ ]
       chain:
         strategy:
           content:

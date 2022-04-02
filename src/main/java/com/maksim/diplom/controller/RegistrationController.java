@@ -88,7 +88,12 @@ public class RegistrationController {
         }
         userFromDb = userRepo.findByEmail(user.getEmail());
         if (userFromDb != null) {
-            LOG.error("Email \"" + user.getName() + "\" already exist.");
+            LOG.error("Email \"" + user.getEmail() + "\" already exist.");
+            return "signup.html";
+        }
+        userFromDb = userRepo.findByPhoneNumber(user.getPhoneNumber());
+        if (userFromDb != null) {
+            LOG.error("Phone number \"" + user.getPhoneNumber() + "\" already exist.");
             return "signup.html";
         }
         EmailValidator emailValidator = EmailValidator.getInstance();
@@ -101,18 +106,4 @@ public class RegistrationController {
         userRepo.save(user);
         return "redirect:/authorization";
     }
-
-
-//    @PostMapping("/signOut")
-//    public String signOut(HttpServletRequest request, HttpServletResponse response){
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null)
-//            for (Cookie cookie : cookies) {
-//                cookie.setValue("");
-//                cookie.setPath("/");
-//                cookie.setMaxAge(0);
-//                response.addCookie(cookie);
-//            }
-//        return "hello.html";
-//    }
 }

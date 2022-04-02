@@ -43,7 +43,7 @@ public class WebController {
      */
     @RequestMapping("/")
     public String helloView(Model model, HttpServletResponse response) {
-        return "hello.html";
+        return "redirect:/viewAdverts";
     }
 
     /**
@@ -71,7 +71,7 @@ public class WebController {
         User userRepoById = userRepo.findById(Long.parseLong(cookies[0].getValue()));
         userRepoById.setPassword(null);
         model.addAttribute("user", userRepoById);
-        return "home.html";
+        return "redirect:/viewAuthorisedAdverts";
     }
 
 
@@ -106,6 +106,15 @@ public class WebController {
     }
 
     /**
+     * Отображение страницы со списком комнат.
+     * @return view viewAdvert.html
+     */
+    @GetMapping("/viewAuthorisedAdverts")
+    public String viewAuAdverts() {
+        return "viewAuthorisedAdverts.html";
+    }
+
+    /**
      * Отображение игровой комнаты.
      * Так же осущствляет проверку на то, авторизировался ли пользователь, а также есть ли он в этой комнате:
      * - если да:  отображает страницу игровой комнаты [letsPlay.html];
@@ -118,7 +127,7 @@ public class WebController {
      * @return view letsPlay.html redirect:/signup or redirect:/playrooms
      */
     @RequestMapping("/viewAdverts/{advertId}")
-    public String roomId(Model model, @PathVariable(value = "advertId") Long advertId, HttpServletRequest request) {
+    public String singleAdvert(Model model, @PathVariable(value = "advertId") Long advertId, HttpServletRequest request) {
 //        Cookie[] cookies = request.getCookies();
 //        for (Cookie cookie : cookies) {
 //            if (cookie.getName().equals("userId")) {
@@ -135,6 +144,39 @@ public class WebController {
         } else {
             LOG.error("Advert does not exist");
             return "redirect:/viewAdverts";
+        }
+    }
+
+    /**
+     * Отображение игровой комнаты.
+     * Так же осущствляет проверку на то, авторизировался ли пользователь, а также есть ли он в этой комнате:
+     * - если да:  отображает страницу игровой комнаты [letsPlay.html];
+     * - если нет: возвращает на страницу авторизации (пользователь не авторизован) [redirect:/signup]
+     * или на страницу со списком комнат [redirect:/playrooms].
+     *
+     * @param model      to view page
+     * @param advertId the room number
+     * @param request    to get Cookies
+     * @return view letsPlay.html redirect:/signup or redirect:/playrooms
+     */
+    @RequestMapping("/viewAuthorisedAdverts/{advertId}")
+    public String singleAuthorisedAdvert(Model model, @PathVariable(value = "advertId") Long advertId, HttpServletRequest request) {
+//        Cookie[] cookies = request.getCookies();
+//        for (Cookie cookie : cookies) {
+//            if (cookie.getName().equals("userId")) {
+//                cookies[0] = cookie;
+//                break;
+//            }
+//        }
+//        if (request.getCookies() == null)
+//            return "redirect:/signup";
+//        else if (!cookies[0].getName().equals("userId"))
+//            return "redirect:/signup";
+        if (advertRepo.findById(advertId).isPresent()) {
+            return "singleAuthorisedAdvert.html";
+        } else {
+            LOG.error("Advert does not exist");
+            return "redirect:/viewAuthorisedAdverts";
         }
     }
 }

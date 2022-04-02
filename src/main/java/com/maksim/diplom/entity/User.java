@@ -33,6 +33,10 @@ public class User {
      * Поле почты.
      */
     private String email;
+    /**
+     * Поле номера телефона.
+     */
+    private String phoneNumber;
 
     public String toString(){
         return "Name: " + name + "\nLogin: " + login + "\nEmail: " + email + "\nPassword: " + password + "\n";
