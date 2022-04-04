@@ -2,7 +2,9 @@ package com.maksim.diplom.repos;
 
 import com.maksim.diplom.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -59,4 +61,10 @@ public interface UserRepo extends JpaRepository<User, Long> {
      * @return the user
      */
     User findById(long id);
+
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update users_table set name = ?1, login = ?2, email = ?3, phone_number = ?4 where id = ?5")
+    void updateDate(String name, String login, String email, String phone_Number, Long id);
 }

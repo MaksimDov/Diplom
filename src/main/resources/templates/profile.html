@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <head>
     <meta charset="UTF-8">
-    <title>Add_Advert</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-            crossorigin="anonymous"></script>
+    <title>Mafia</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/profile.js"></script>
 </head>
 <body style="background-color: rgba(238,183,131,0.89)">
 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
@@ -32,42 +31,54 @@
                            style="margin-top: 7px; background-color: #343940; color: white; border: 0"/>
                 </form>
             </li>
-
         </ul>
-
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Я для красоты ¯\_(ツ)_/¯">
+        </form>
     </div>
 </nav>
+<!--<div class="container">-->
+<!--    <div id="login"></div>-->
+<!--    <br>-->
+<!--    <div id="name"></div>-->
+<!--    <br>-->
+<!--    <div id="email"></div>-->
+<!--    <br>-->
+<!--    <div id="phoneNumber"></div>-->
 
-
-<h1 style="align: center; margin: 150px 0px 0px 740px">Заполните все поля</h1>
 <div style="width: 20vw; height: 20vw; position: absolute; top: 17vw; left: 40vw; right: 50vw">
-    <form th:action="@{/saveAdvert}" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <label>Pictures</label>
-            <input required type="file" class="form-control" id="picture" name="picture" multiple accept="image/*,image/jpeg" placeholder="Изображение">
-        </div>
+    <form th:action="@{/changeUserData}" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label>Name</label>
-            <input required type="text" class="form-control" name="name" placeholder="Название">
+            <input required type="text" class="form-control" id="name">
         </div>
         <div class="form-group">
-            <label>Description</label>
-            <textarea required type="text" class="form-control" name="description" placeholder="Описание"></textarea>
+            <label>Login</label>
+            <input required type="text" class="form-control" id="login">
         </div>
         <div class="form-group">
-            <label>City</label>
-            <input required type="text" class="form-control" name="city" placeholder="Город">
+            <label>Email</label>
+            <input required type="text" class="form-control" id="email">
+        </div>
+        <div class="form-group">
+            <label>Phone number</label>
+            <input required type="text" class="form-control" id="phoneNumber">
+        </div>
+        <div class="form-group">
+            <label>Ваши интересы:</label>
+            <ul id="interes"></ul>
         </div>
         <div class="form-group">
             <select size="3" multiple name="tags[]" id="tags[]" style="width: 20vw">
-                <option disabled>Выберите теги объявления</option>
+                <option disabled>Выберите интересующие вас темы</option>
                 <option value="Job">Работа</option>
                 <option selected value="Cars">Автомобили</option>
                 <option value="Appliances">Бытовая техника</option>
             </select></p>
         </div>
-        <button type="submit" class="btn btn-primary">Добавить</button>
+        <button type="submit" class="btn btn-primary">Внести изменения профиля</button>
     </form>
 </div>
+
 </body>
 </html>

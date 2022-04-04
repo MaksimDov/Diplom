@@ -8,6 +8,57 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script type="text/javascript" src="js/viewAdverts.js"></script>
 </head>
+<style>
+    .d{
+        display: block;
+        margin: 20px 0px 0px 20px;
+    }
+    .d img{
+        width: 350px;
+        height: 250px;
+        /*margin-bottom: 20px;*/
+    }
+
+    .d h2{
+        display: inline;
+        position: absolute;
+        margin: 10px 0px 0px 20px;
+    }
+    .d p{
+        display: inline;
+        position: absolute;
+        margin: 65px 0px 10px 30px;
+        /*border: 1px solid blue;*/
+        padding: 3px 3px 3px 3px;
+
+    }
+    .blc{
+        border: 2px dashed red;
+        margin-bottom: 10px;
+        margin-right: 20px;
+    }
+    .blc ul{
+        display: inline;
+        position: absolute;
+        margin: 100px 0px 10px 30px;
+        /*border: 1px solid blue;*/
+        padding: 3px 3px 3px 3px;
+        list-style-type: "\1F42D";
+        /*"\1F42D"*/
+    }
+    .btn{
+        margin: 200px 0px 0px 10px;
+        background: yellow;
+        bottom: 0;
+    }
+    .navbtn{
+        margin:5px 0px 0px 400px;
+        background: blue;
+        border-radius: 20px;
+        color: white;
+    }
+
+</style>
 <body style="background-color: rgba(238,183,131,0.89)">
 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
     <a class="navbar-brand" href="#" style="color: white">Мафия</a>
@@ -24,37 +75,23 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/signup" style="color: white">Вход <span class="sr-only">(current)</span></a>
             </li>
+            <li class="nav-item active">
+                <form th:action="@{/addAdvertFromHello}" method="post">
+
+                    <button type="submit" class="navbtn">Разместить объявление</button>
+                </form>
+            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Я для красоты ¯\_(ツ)_/¯">
         </form>
     </div>
 </nav>
-<div class="container">
-    <div class="row">
-        <div class="col-7" style="margin-left: 0vw">
-            <div style="width: 30vw; position: absolute; top: 3vh;">
-                <h1 h1-expand-lg th:inline="text"
-                    style="font-size: 2vw; font-family: revert">
-                    Список райончиков:</h1>
-            </div>
-            <div class="border border-danger"
-                 style="margin-top: 9vh; width: 25vw; height: 70vh; overflow: auto"
-                 id="advertsList"></div>
-            <br>
-        </div>
-        <div style="width: 20vw; height: 20vw; position: absolute; top: 17vw; left: 40vw; right: 50vw">
-            <form th:action="@{/addAdvertFromHello}" method="post">
 
-                <button type="submit" class="btn btn-primary">Разместить объявление</button>
-            </form>
-        </div>
-<!--        <div class="col-5" style="margin-top: 2vh">-->
-<!--            <button class="btn btn-danger" type="submit"-->
-<!--                    style="height: 20vh; width: 20vw; font-family: revert; font-size: 5vh" onclick="create()">СОЗДАТЬ-->
-<!--                КОМНАТУ-->
-<!--            </button>-->
-<!--        </div>-->
+
+<div class="advert">
+    <div class="d"
+         id="advertsList">
     </div>
 </div>
 </body>

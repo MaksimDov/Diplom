@@ -18,41 +18,49 @@ function viewAdverts() {
         if (adView !== "") {
             $('#advertsList').empty();
             var element = document.getElementById('advertsList');
-            var fragment = document.createDocumentFragment();
+            // var fragment = document.createDocumentFragment();
             var setUserName, setAdName, setAdDescription, setTags, setAdId, path;;
             var parsed = JSON.parse(adView);
             parsed.forEach((elem) => {
-                setUserName = elem.userName;
                 setAdName = elem.adName;
+                setUserName = elem.userName;
                 setAdDescription = elem.adDescription;
                 setAdId = elem.adId;
                 path = elem.picPath;
                 setTags = "";
-                elem.tags.forEach((el) => {
-                    setTags = setTags + el + " ";
-                })
-                var picFrag = document.createDocumentFragment('a');
-                var picElement = document.createElement('img');
-                picElement.id = path;
-                picElement.src = path;
-                picFrag.appendChild(picElement);
-                element.appendChild(picFrag);
-                var buttonElement = document.createElement('button');
-                        buttonElement.className = "btn";
-                        buttonElement.type = "submit";
-                        buttonElement.id = setAdId;
-                        buttonElement.onclick = function () {
-                            clickRoom(this);
-                        };
-                        buttonElement.textContent = "id: " + setAdId + " userName:" + setUserName + " adName:" + setAdName + " des:" + setAdDescription + " tags:" + setTags;
-                        // buttonElement.textContent = "text";
-                        fragment.appendChild(buttonElement);
 
-                        var brb = document.createElement('br');
-                        fragment.appendChild(brb);
-                        var brbr = document.createElement('br');
-                        fragment.appendChild(brbr);
-                        element.appendChild(fragment)
+                if(setAdDescription.length > 149){
+                    setAdDescription = setAdDescription.substring(0,149) + '...'
+                }
+                let block = document.createElement('div')
+                block.className = 'blc'
+                let picImg = document.createElement('img')
+                picImg.src = path;
+                let naz = document.createElement('h2')
+                naz.textContent = setAdName
+                var button= document.createElement('button');
+                button.className = "btn";
+                button.type = "submit";
+                button.id = setAdId;
+                button.onclick = function () {
+                    clickRoom(this);
+                };
+                button.textContent = "Посмотреть";
+                let opis = document.createElement('p')
+                opis.textContent = "Описание: " + setAdDescription
+
+                let tagUl = document.createElement('ul')
+                for(let i=0;i<elem.tags.length;++i){
+                    var tagLi = document.createElement('li')
+                    tagLi.innerHTML = elem.tags[i];
+                    tagUl.appendChild(tagLi)
+                }
+                block.appendChild(picImg)
+                block.appendChild(naz)
+                block.appendChild(opis)
+                block.appendChild(tagUl)
+                element.appendChild(block)
+                block.appendChild(button)
             })
         }
     });

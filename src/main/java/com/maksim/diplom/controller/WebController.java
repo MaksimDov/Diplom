@@ -1,6 +1,7 @@
 package com.maksim.diplom.controller;
 
 import com.maksim.diplom.repos.AdvertRepo;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -179,4 +180,21 @@ public class WebController {
             return "redirect:/viewAuthorisedAdverts";
         }
     }
+
+    @RequestMapping("/profile")
+    public String viewProfilePage(Model model, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+            if (cookie.getName().equals("userId")) {
+                cookies[0] = cookie;
+                break;
+            }
+        if (request.getCookies() == null)
+            return "redirect:/signup";
+        else if (!cookies[0].getName().equals("userId"))
+            return "redirect:/signup";
+        return "profile.html";
+    }
+
+
 }

@@ -86,13 +86,13 @@ public class AdvertController {
             os.write(multipartFile.getBytes());
         }
 
-        File file = new File("./src/main/resources/static/tempPicture/" + name);
-        BufferedImage originalBufferedImage = ImageIO.read(file);
-        ResampleOp resamOp = new ResampleOp(100, 100);
-        BufferedImage modifiedImage = resamOp.filter(originalBufferedImage, null);
-        ImageIO.write(modifiedImage, type, file);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(modifiedImage, multipartFile.getContentType().substring(6), baos);
+//        File file = new File("./src/main/resources/static/tempPicture/" + name);
+//        BufferedImage originalBufferedImage = ImageIO.read(file);
+//        ResampleOp resamOp = new ResampleOp(100, 100);
+//        BufferedImage modifiedImage = resamOp.filter(originalBufferedImage, null);
+//        ImageIO.write(modifiedImage, type, file);
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        ImageIO.write(modifiedImage, multipartFile.getContentType().substring(6), baos);
 
 
         Picture pic = new Picture();
