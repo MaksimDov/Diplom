@@ -28,9 +28,13 @@ public class Advert {
     /**
      * Поле идентификатора пользователя.
      */
-    private Long UserId;
+    private Long userId;
     /**
      * Поле города.
      */
     private String city;
+    /**
+     * Поле цены.
+     */
+    private String cost;
 }

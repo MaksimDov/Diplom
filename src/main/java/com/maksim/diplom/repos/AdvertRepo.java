@@ -24,6 +24,6 @@ public interface AdvertRepo extends JpaRepository<Advert, Long> {
     @Transactional
     void deleteAllById(@Param("id") Long id);
 
-//    List<Advert> findAllByUserId(Long userId);
+    List<Advert> findAllByUserId(Long userId);
 
 }

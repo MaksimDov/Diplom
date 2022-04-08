@@ -20,43 +20,74 @@ function viewSingle() {
             $('#advertsList').empty();
             var element = document.getElementById('advertsList');
             var fragment = document.createDocumentFragment();
-            var setUserName, setAdName, setAdDescription, setTags, setAdId;
+            var setUserName, setAdName, setAdDescription, setTags, setAdId, owner;
             var parsed = JSON.parse(adView);
 
+            setUserEmail = parsed.userEmail;
+            setUserPhoneNumber = parsed.userPhoneNumber;
             setUserName = parsed.userName;
+            cost = parsed.adCost
             setAdName = parsed.adName;
             setAdDescription = parsed.adDescription;
             setAdId = parsed.adId;
+            owner = parsed.owner;
             setTags = "";
-            parsed.tags.forEach((el) => {
-                setTags = setTags + el + " ";
-            })
-            var buttonElement = document.createElement('button');
-            buttonElement.className = "btn";
-            buttonElement.type = "submit";
-            buttonElement.id = setAdId;
-            buttonElement.textContent = "id: " + setAdId + " userName:" + setUserName + " adName:" + setAdName + " des:" + setAdDescription + " tags:" + setTags;
-            fragment.appendChild(buttonElement);
 
-            var brb = document.createElement('br');
-            fragment.appendChild(brb);
-            var brbr = document.createElement('br');
-            fragment.appendChild(brbr);
-            element.appendChild(fragment);
-            var picFrag = document.createDocumentFragment('a');
-            var picElement = document.createElement('img');
+            let block = document.createElement('div')
+            block.className = 'blc'
+            let picImg = document.createElement('img')
+            // picImg.src = path;
+            let naz = document.createElement('h2')
+            naz.textContent = setAdName
+            let price = document.createElement('p6')
+            price.textContent = "Цена: " + cost
+            // var button= document.createElement('button');
+            // button.className = "btn";
+            // button.type = "submit";
+            // button.id = setAdId;
+            // button.onclick = function () {
+            //     clickRoom(this);
+            // };
+            // button.textContent = "Удалить";
 
+
+            let opis = document.createElement('p')
+            opis.textContent = "Описание: " + setAdDescription
+
+            let tagP = document.createElement('p2')
+            tagP.className = 'tags'
+            for(let i=0;i< parsed.tags.length;++i){
+                setTags = setTags + parsed.tags[i] + '; '
+            }
+            tagP.textContent =  setTags
+
+            let usName = document.createElement('p3')
+            usName.textContent = "Имя: " + setUserName;
+
+            let phone = document.createElement('p4')
+            phone.textContent = "Номер телефона: " + setUserPhoneNumber;
+
+            let mail = document.createElement('p5')
+            mail.textContent = "Почта: " + setUserEmail;
             var picArray = parsed.pictures;
-            picElement.id = "picId";
-            picElement.alt = 0;
-            picElement.src = picArray[0];
-            picElement.onclick = function (){
+            picImg.id = "picId";
+            picImg.alt = 0;
+            picImg.src = picArray[0];
+            picImg.onclick = function (){
                 changePic()
             }
-            picFrag.appendChild(picElement);
-            element.appendChild(picFrag);
+            block.appendChild(picImg)
+            block.appendChild(naz)
+            block.appendChild(usName)
+            block.appendChild(phone)
+            block.appendChild(mail)
+            block.appendChild(opis)
+            block.appendChild(price)
+            block.appendChild(tagP)
+            element.appendChild(block)
+            block.appendChild(button)
         }
-    });
+    })
 }
 
 // function viewSinglePerSec() {

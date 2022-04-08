@@ -10,7 +10,6 @@
 </head>
 <body style="background-color: rgba(238,183,131,0.89)">
 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-    <a class="navbar-brand" href="#" style="color: white">Мафия</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
             aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -19,7 +18,7 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item active">
-                <a class="nav-link" href="/viewAuthorisedAdverts" style="color: white">Главная <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/viewAuthorisedAdverts" onclick="window.name = '0'" style="color: white">Главная <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="/profile" style="color: white">Профиль <span class="sr-only">(current)</span></a>
@@ -50,19 +49,19 @@
     <form th:action="@{/changeUserData}" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label>Name</label>
-            <input required type="text" class="form-control" id="name">
-        </div>
-        <div class="form-group">
-            <label>Login</label>
-            <input required type="text" class="form-control" id="login">
+            <input required type="text" name="name" class="form-control" id="name">
         </div>
         <div class="form-group">
             <label>Email</label>
-            <input required type="text" class="form-control" id="email">
+            <input required type="text" name="email" class="form-control" id="email">
         </div>
         <div class="form-group">
             <label>Phone number</label>
-            <input required type="text" class="form-control" id="phoneNumber">
+            <input required type="text" name="phoneNumber" class="form-control" id="phoneNumber">
+        </div>
+        <div class="form-group">
+            <label>Login</label>
+            <input required type="text" name="login" class="form-control" id="login">
         </div>
         <div class="form-group">
             <label>Ваши интересы:</label>

@@ -38,7 +38,10 @@ public class User {
      */
     private String phoneNumber;
 
+    private String role;
+
+
     public String toString(){
-        return "Name: " + name + "\nLogin: " + login + "\nEmail: " + email + "\nPassword: " + password + "\n";
+        return "Name: " + name + "\nLogin: " + login + "\nEmail: " + email + "\nPhone: " + phoneNumber + "\nPassword: " + password + "\n";
     }
 }

@@ -47,11 +47,10 @@ public class AdvertController {
 
     /**
      * @param advert it receives data from forms
-     * @param model  to view page
      * @return view signup.html or redirect:/authorization
      */
     @PostMapping("/saveAdvert")
-    public String saveAdvert(Advert advert, Model model, @RequestParam("picture") MultipartFile[] file, @RequestParam("tags[]") String[] tags,  HttpServletRequest request) throws IOException {
+    public String saveAdvert(Advert advert, @RequestParam("picture") MultipartFile[] file, @RequestParam("tags[]") String[] tags,  HttpServletRequest request) throws IOException {
         Cookie[] cookies = request.getCookies();
         advert.setUserId(Long.parseLong(cookies[0].getValue()));
         advertRepo.save(advert);

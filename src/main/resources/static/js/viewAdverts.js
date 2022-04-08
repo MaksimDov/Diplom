@@ -28,6 +28,7 @@ function viewAdverts() {
                 setAdId = elem.adId;
                 path = elem.picPath;
                 setTags = "";
+                cost = elem.cost;
 
                 if(setAdDescription.length > 149){
                     setAdDescription = setAdDescription.substring(0,149) + '...'
@@ -49,6 +50,9 @@ function viewAdverts() {
                 let opis = document.createElement('p')
                 opis.textContent = "Описание: " + setAdDescription
 
+                let price = document.createElement('h3')
+                price.textContent = cost
+                price.className = "price"
                 let tagUl = document.createElement('ul')
                 for(let i=0;i<elem.tags.length;++i){
                     var tagLi = document.createElement('li')
@@ -57,6 +61,7 @@ function viewAdverts() {
                 }
                 block.appendChild(picImg)
                 block.appendChild(naz)
+                block.appendChild(price)
                 block.appendChild(opis)
                 block.appendChild(tagUl)
                 element.appendChild(block)

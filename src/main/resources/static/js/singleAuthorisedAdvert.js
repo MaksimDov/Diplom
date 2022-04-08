@@ -32,6 +32,7 @@ function viewSingle() {
             setUserEmail = parsed.userEmail;
             setUserPhoneNumber = parsed.userPhoneNumber;
             setUserName = parsed.userName;
+            cost = parsed.adCost
             setAdName = parsed.adName;
             setAdDescription = parsed.adDescription;
             setAdId = parsed.adId;
@@ -44,6 +45,8 @@ function viewSingle() {
             // picImg.src = path;
             let naz = document.createElement('h2')
             naz.textContent = setAdName
+            let price = document.createElement('p6')
+            price.textContent = "Цена: " + cost
             // var button= document.createElement('button');
             // button.className = "btn";
             // button.type = "submit";
@@ -99,6 +102,7 @@ function viewSingle() {
             block.appendChild(phone)
             block.appendChild(mail)
             block.appendChild(opis)
+            block.appendChild(price)
             block.appendChild(tagP)
             element.appendChild(block)
             block.appendChild(button)

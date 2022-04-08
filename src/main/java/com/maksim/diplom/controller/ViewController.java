@@ -89,6 +89,7 @@ public class ViewController {
             tempJson.put("adName", adName);
             tempJson.put("adDescription", adDescription);
             tempJson.put("picPath", picPath);
+            tempJson.put("cost", advert.getCost());
             tempJson.put("tags", jsonArray);
             resultJson.add(tempJson);
         }
@@ -151,6 +152,9 @@ public class ViewController {
         resultJson.put("adDescription", adDescription);
         resultJson.put("tags", jsonArray);
         resultJson.put("pictures", picArray);
+        resultJson.put("userEmail", userNow.getEmail());
+        resultJson.put("userPhoneNumber", userNow.getPhoneNumber());
+        resultJson.put("adCost", advert.getCost());
 //        System.out.println(resultJson.toString());
         return resultJson.toString();
     }

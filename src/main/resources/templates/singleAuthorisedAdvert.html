@@ -27,6 +27,7 @@
         align-items: center;
         justify-content: center;
         margin: 10px 0px 0px -140px;
+        font-weight: bold;
         font-size: 3rem;
     }
     .d p{
@@ -36,6 +37,17 @@
         margin: 200px 30px 10px 30px;
         /*border: 1px solid blue;*/
         padding: 3px 3px 3px 3px;
+        font-size: 17px;
+
+    }
+    .d p6{
+        max-width: 400px;
+        display: inline-block;
+        position: absolute;
+        margin: 425px 30px 10px 30px;
+        /*border: 1px solid blue;*/
+        padding: 3px 3px 3px 3px;
+        font-weight: bold;
         font-size: 17px;
 
     }
@@ -95,7 +107,6 @@
 </style>
 <body style="background-color: rgba(238,183,131,0.89)">
 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-    <a class="navbar-brand" href="#" style="color: white">Мафия</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
             aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -104,7 +115,7 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item active">
-                <a class="nav-link" href="/viewAuthorisedAdverts" style="color: white">Главная <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/viewAuthorisedAdverts" onclick="window.name = '0'" style="color: white">Главная <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="/profile" style="color: white">Профиль <span class="sr-only">(current)</span></a>

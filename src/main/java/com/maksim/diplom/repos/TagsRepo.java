@@ -16,4 +16,5 @@ public interface TagsRepo extends JpaRepository <Tags, Long> {
     @Modifying
     @Transactional
     void deleteAllByAdvertId(@Param("advert_id") Long advertId);
+
 }

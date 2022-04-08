@@ -1,13 +1,7 @@
 package com.maksim.diplom.controller;
 
-import com.maksim.diplom.entity.Advert;
-import com.maksim.diplom.entity.Picture;
-import com.maksim.diplom.entity.Tags;
-import com.maksim.diplom.entity.User;
-import com.maksim.diplom.repos.AdvertRepo;
-import com.maksim.diplom.repos.PicturesRepo;
-import com.maksim.diplom.repos.TagsRepo;
-import com.maksim.diplom.repos.UserRepo;
+import com.maksim.diplom.entity.*;
+import com.maksim.diplom.repos.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +41,8 @@ public class ViewAuthorisedController {
     private TagsRepo tagsRepo;
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private UsersTagsRepo usersTagsRepo;
 
     /**
      * Обновляет список доступных (находящихся на стадии регистрации) комнат.
@@ -71,6 +67,7 @@ public class ViewAuthorisedController {
         String adName;
         String adDescription;
         String picPath;
+        String adCost;
 
         JSONArray resultJson = new JSONArray();
         for (Advert advert : adverts) {
@@ -81,6 +78,7 @@ public class ViewAuthorisedController {
             userName = userNow.getName();
             adName = advert.getName();
             adDescription = advert.getDescription();
+            adCost = advert.getCost();
             List<Tags> tagsList = tagsRepo.findAllByAdvertId(advert.getId());
             JSONArray jsonArray = new JSONArray();
             for (int t = 0; t < tagsList.size(); ++t){
@@ -90,6 +88,7 @@ public class ViewAuthorisedController {
             tempJson.put("userName", userName);
             tempJson.put("adName", adName);
             tempJson.put("adDescription", adDescription);
+            tempJson.put("adCost", adCost);
             tempJson.put("picPath", picPath);
             tempJson.put("tags", jsonArray);
             resultJson.add(tempJson);
@@ -144,6 +143,9 @@ public class ViewAuthorisedController {
         if (userRepoById.getId() == userNow.getId()){
             owner = "true";
         }
+        if (userRepoById.getRole() != null){
+            owner = "true";
+        }
         userName = userNow.getName();
         adName = advert.getName();
         adDescription = advert.getDescription();
@@ -165,6 +167,7 @@ public class ViewAuthorisedController {
         resultJson.put("owner", owner);
         resultJson.put("userEmail", userNow.getEmail());
         resultJson.put("userPhoneNumber", userNow.getPhoneNumber());
+        resultJson.put("adCost", advert.getCost());
         resultJson.put("tags", jsonArray);
         resultJson.put("pictures", picArray);
 //        System.out.println(resultJson.toString());
@@ -212,52 +215,114 @@ public class ViewAuthorisedController {
 
     }
 
-//    /**
-//     * Обновляет список доступных (находящихся на стадии регистрации) комнат.
-//     * Передает сформированный лист объектов через json пользователю.
-//     *
-//     * @param request to get Cookies [to find user by id]
-//     * @param model   the model
-//     * @return json (list rooms)
-//     */
-//    @GetMapping("/viewMyAd")
-//    public String viewMyAd(HttpServletRequest request, Model model) throws NoEntityException {
-//        if (advertRepo.findAll() == null)
-//            return "";
-//        Cookie[] cookies = request.getCookies();
-//        for (Cookie cookie : cookies)
-//            if (cookie.getName().equals("userId")) {
-//                cookies[0] = cookie;
-//                break;
-//            }
-//        List<Advert> adverts = advertRepo.findAllByUserId(Long.parseLong(cookies[0].getValue())).stream().sorted(Comparator.comparing(Advert::getId)).collect(Collectors.toList());
-//        String userName;
-//        String adName;
-//        String adDescription;
-//        String picPath;
-//
-//        JSONArray resultJson = new JSONArray();
-//        for (Advert advert : adverts) {
-//            JSONObject tempJson = new JSONObject();
-//            Picture picture = picturesRepo.findTopByAdvertId(advert.getId());
-//            picPath = picture.getPicture();
-//            User userNow = userRepo.findById(advert.getUserId()).orElseThrow(() -> new NoEntityException(advert.getUserId()));
-//            userName = userNow.getName();
-//            adName = advert.getName();
-//            adDescription = advert.getDescription();
-//            List<Tags> tagsList = tagsRepo.findAllByAdvertId(advert.getId());
-//            JSONArray jsonArray = new JSONArray();
-//            for (int t = 0; t < tagsList.size(); ++t){
-//                jsonArray.add(tagsList.get(t).getName());
-//            }
-//            tempJson.put("adId", advert.getId());
-//            tempJson.put("userName", userName);
-//            tempJson.put("adName", adName);
-//            tempJson.put("adDescription", adDescription);
-//            tempJson.put("picPath", picPath);
-//            tempJson.put("tags", jsonArray);
-//            resultJson.add(tempJson);
-//        }
-//        return resultJson.toString();
-//    }
+    /**
+     * Обновляет список доступных (находящихся на стадии регистрации) комнат.
+     * Передает сформированный лист объектов через json пользователю.
+     *
+     * @param request to get Cookies [to find user by id]
+     * @param model   the model
+     * @return json (list rooms)
+     */
+    @GetMapping("/viewMyAd")
+    public String viewMyAd(HttpServletRequest request, Model model) throws NoEntityException {
+        if (advertRepo.findAll() == null)
+            return "";
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+            if (cookie.getName().equals("userId")) {
+                cookies[0] = cookie;
+                break;
+            }
+        List<Advert> adverts = advertRepo.findAllByUserId(Long.parseLong(cookies[0].getValue())).stream().sorted(Comparator.comparing(Advert::getId)).collect(Collectors.toList());
+        String userName;
+        String adName;
+        String adDescription;
+        String picPath;
+
+        JSONArray resultJson = new JSONArray();
+        for (Advert advert : adverts) {
+            JSONObject tempJson = new JSONObject();
+            Picture picture = picturesRepo.findTopByAdvertId(advert.getId());
+            picPath = picture.getPicture();
+            User userNow = userRepo.findById(advert.getUserId()).orElseThrow(() -> new NoEntityException(advert.getUserId()));
+            userName = userNow.getName();
+            adName = advert.getName();
+            adDescription = advert.getDescription();
+            List<Tags> tagsList = tagsRepo.findAllByAdvertId(advert.getId());
+            JSONArray jsonArray = new JSONArray();
+            for (int t = 0; t < tagsList.size(); ++t){
+                jsonArray.add(tagsList.get(t).getName());
+            }
+            tempJson.put("adId", advert.getId());
+            tempJson.put("userName", userName);
+            tempJson.put("adName", adName);
+            tempJson.put("adDescription", adDescription);
+            tempJson.put("picPath", picPath);
+            tempJson.put("tags", jsonArray);
+            resultJson.add(tempJson);
+        }
+//        System.out.println(resultJson);
+        return resultJson.toString();
+    }
+
+    /**
+     * Обновляет список доступных (находящихся на стадии регистрации) комнат.
+     * Передает сформированный лист объектов через json пользователю.
+     *
+     * @param request to get Cookies [to find user by id]
+     * @param model   the model
+     * @return json (list rooms)
+     */
+    @GetMapping("/viewRecomend")
+    public String viewRecomend(HttpServletRequest request, Model model) throws NoEntityException {
+        if (advertRepo.findAll() == null)
+            return "";
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+            if (cookie.getName().equals("userId")) {
+                cookies[0] = cookie;
+                break;
+            }
+        List<UsersTags> usersTags = usersTagsRepo.findAllByUsersId(Long.parseLong(cookies[0].getValue()));
+        List<Advert> adverts = advertRepo.findAll();
+        String userName;
+        String adName;
+        String adDescription;
+        String picPath;
+        JSONArray resultJson = new JSONArray();
+        for (Advert advert : adverts) {
+            boolean isAd = false;
+            List<Tags> tagsList = tagsRepo.findAllByAdvertId(advert.getId());
+            for (UsersTags ut : usersTags){
+                for (Tags at : tagsList){
+                    if (Objects.equals(ut.getTagName(), at.getName())){
+                        isAd = true;
+                        JSONObject tempJson = new JSONObject();
+                        Picture picture = picturesRepo.findTopByAdvertId(advert.getId());
+                        picPath = picture.getPicture();
+                        User userNow = userRepo.findById(advert.getUserId()).orElseThrow(() -> new NoEntityException(advert.getUserId()));
+                        userName = userNow.getName();
+                        adName = advert.getName();
+                        adDescription = advert.getDescription();
+                        JSONArray jsonArray = new JSONArray();
+                        for (int t = 0; t < tagsList.size(); ++t){
+                            jsonArray.add(tagsList.get(t).getName());
+                        }
+                        tempJson.put("adId", advert.getId());
+                        tempJson.put("userName", userName);
+                        tempJson.put("adName", adName);
+                        tempJson.put("adDescription", adDescription);
+                        tempJson.put("picPath", picPath);
+                        tempJson.put("tags", jsonArray);
+                        resultJson.add(tempJson);
+                    }
+                    if(isAd) break;
+                }
+                if (isAd) break;
+            }
+        }
+        System.out.println(resultJson);
+//        System.out.println(resultJson);
+        return resultJson.toString();
+    }
 }

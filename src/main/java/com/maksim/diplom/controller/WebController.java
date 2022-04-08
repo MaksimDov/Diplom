@@ -1,21 +1,22 @@
 package com.maksim.diplom.controller;
 
+import com.maksim.diplom.entity.Tags;
+import com.maksim.diplom.entity.UsersTags;
 import com.maksim.diplom.repos.AdvertRepo;
+import com.maksim.diplom.repos.UsersTagsRepo;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import com.maksim.diplom.entity.User;
 import com.maksim.diplom.repos.UserRepo;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 
 /**
  * Класс-контроллер для отображения страниц.
@@ -33,6 +34,8 @@ public class WebController {
     private UserRepo userRepo;
     @Autowired
     private AdvertRepo advertRepo;
+    @Autowired
+    private UsersTagsRepo usersTagsRepo;
 
 
     /**
@@ -196,5 +199,59 @@ public class WebController {
         return "profile.html";
     }
 
+    /**
+     * Регистрация пользователя в нашей системе. Выполняет поиск пользователя по логину в БД, проверяет, есть ли уже такое:
+     * - если нет:  добавляет пользователя в БД и переходит на страницу авторизации [/authorization];
+     * - если да: возвращает на страницу регистрации [signup.html].
+     *
+     * @param user  it receives data from forms
+     * @param model to view page
+     * @return view signup.html or redirect:/authorization
+     */
+    @PostMapping("/changeUserData")
+    public String changeUserData(User user, @RequestParam("tags[]") String[] tags, Model model, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+            if (cookie.getName().equals("userId")) {
+                cookies[0] = cookie;
+                break;
+            }
+        User userNow = userRepo.findById(Long.parseLong(cookies[0].getValue()));
+        System.out.println(user);
+        User userFromDb = userRepo.findByLogin(user.getLogin());
+        if (Objects.equals(userFromDb.getId(), userNow.getId())) userFromDb = null;
+        if (userFromDb != null) {
+//            LOG.error("Login \"" + user.getName() + "\" already exist.");
+            return "redirect:/profile";
+        }
+        userFromDb = userRepo.findByEmail(user.getEmail());
+        if (Objects.equals(userFromDb.getId(), userNow.getId())) userFromDb = null;
+        if (userFromDb != null) {
+//            LOG.error("Email \"" + user.getEmail() + "\" already exist.");
+            return "redirect:/profile";
+        }
+        userFromDb = userRepo.findByPhoneNumber(user.getPhoneNumber());
+        if (Objects.equals(userFromDb.getId(), userNow.getId())) userFromDb = null;
+        if (userFromDb != null) {
+//            LOG.error("Phone number \"" + user.getPhoneNumber() + "\" already exist.");
+            return "redirect:/profile";
+        }
+        EmailValidator emailValidator = EmailValidator.getInstance();
+        if(!emailValidator.isValid(user.getEmail())){
+//            LOG.error("Wrong email address.");
+            return "redirect:/profile";
+        }
+//        LOG.info("User " + user.getLogin() + " is registered.");
+        userRepo.updateDate(user.getName(), user.getLogin(), user.getEmail(), user.getPhoneNumber(), userNow.getId());
+        if (!tags[0].isEmpty()) {
+            for (String s : tags) {
+                UsersTags tagsEnt = new UsersTags();
+                tagsEnt.setUsersId(userNow.getId());
+                tagsEnt.setTagName(s);
+                usersTagsRepo.save(tagsEnt);
+            }
+        }
+        return "redirect:/profile";
+    }
 
 }
