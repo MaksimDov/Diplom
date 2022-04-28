@@ -12,4 +12,7 @@ import java.util.List;
 public interface UsersTagsRepo extends JpaRepository<UsersTags, Long> {
     List<UsersTags> findAllByUsersId(Long usersId);
 
+    @Transactional
+    void deleteAllByUsersId(Long usersId);
+
 }

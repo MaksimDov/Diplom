@@ -64,6 +64,39 @@
         border-radius: 20px;
         color: white;
     }
+    * {box-sizing: border-box;}
+    .formSe {
+        position: relative;
+        width: 300px;
+        margin: 0 auto;
+    }
+    .inputSe {
+        width: 100%;
+        height: 42px;
+        padding-left: 10px;
+        border: 2px solid #7BA7AB;
+        border-radius: 5px;
+        outline: none;
+        background: #F9F0DA;
+        color: #9E9C9C;
+    }
+    .buttonSe {
+        position: absolute;
+        top: 0;
+        right: 0px;
+        width: 42px;
+        height: 42px;
+        border: none;
+        background: #7BA7AB;
+        border-radius: 0 5px 5px 0;
+        cursor: pointer;
+    }
+    .buttonSe:before {
+        content: "🔍";
+        font-family: FontAwesome;
+        font-size: 16px;
+        color: #F9F0DA;
+    }
 
 </style>
 <body style="background-color: rgba(238,183,131,0.89)">
@@ -105,8 +138,9 @@
                 </form>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Я для красоты ¯\_(ツ)_/¯">
+        <form class="formSe">
+            <input class="inputSe" type="text" id="searchField" name="searchField" placeholder="Искать здесь...">
+            <button class="buttonSe" id="buttonSearch" type="submit" onclick="changeView(this)"></button>
         </form>
     </div>
 </nav>

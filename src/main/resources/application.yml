@@ -17,6 +17,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+  web:
     resources:
       static-locations: [ classpath:/resources/, classpath:/static/ ]
       chain:
@@ -24,3 +25,5 @@ spring:
           content:
             paths: /**
             enabled: true
+#  cache:
+#    type: NONE

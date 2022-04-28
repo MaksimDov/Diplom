@@ -52,6 +52,11 @@ public class AdvertController {
     @PostMapping("/saveAdvert")
     public String saveAdvert(Advert advert, @RequestParam("picture") MultipartFile[] file, @RequestParam("tags[]") String[] tags,  HttpServletRequest request) throws IOException {
         Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies)
+            if (cookie.getName().equals("userId")) {
+                cookies[0] = cookie;
+                break;
+            }
         advert.setUserId(Long.parseLong(cookies[0].getValue()));
         advertRepo.save(advert);
         Long advertId = advertRepo.getMaxAdvertId();

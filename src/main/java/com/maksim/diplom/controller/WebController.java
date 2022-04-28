@@ -243,6 +243,7 @@ public class WebController {
         }
 //        LOG.info("User " + user.getLogin() + " is registered.");
         userRepo.updateDate(user.getName(), user.getLogin(), user.getEmail(), user.getPhoneNumber(), userNow.getId());
+        usersTagsRepo.deleteAllByUsersId(userNow.getId());
         if (!tags[0].isEmpty()) {
             for (String s : tags) {
                 UsersTags tagsEnt = new UsersTags();
