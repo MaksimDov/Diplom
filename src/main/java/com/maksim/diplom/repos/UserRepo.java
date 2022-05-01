@@ -62,6 +62,17 @@ public interface UserRepo extends JpaRepository<User, Long> {
      */
     User findById(long id);
 
+    @Transactional
+    @Query(nativeQuery = true, value = "select max(id) from users_table")
+    Long getMaxId();
+
+    @Transactional
+    void deleteAllById(Long id);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update users_table set confirm = ?1 where id = ?2")
+    void updateConfirm(String confirm, Long id);
 
     @Modifying
     @Transactional

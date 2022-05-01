@@ -40,6 +40,8 @@ public class User {
 
     private String role;
 
+    private String confirm;
+
 
     public String toString(){
         return "Name: " + name + "\nLogin: " + login + "\nEmail: " + email + "\nPhone: " + phoneNumber + "\nPassword: " + password + "\n";

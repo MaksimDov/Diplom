@@ -13,6 +13,11 @@ function clickRoom(data) {
     });
 }
 
+function searchAdvert(data) {
+    window.name = data
+    location.href = location.href
+}
+
 
 function viewMyAd() {
     $.get('/viewAuthorisedAdverts/viewMyAd').then(function (adView) {
@@ -131,7 +136,10 @@ function viewRecomend() {
 }
 
 function viewSearch() {
-    $.get('/viewAuthorisedAdverts/viewSearch').then(function (adView) {
+    // $.get('/viewAuthorisedAdverts/viewSearch').then(function (adView) {
+    $.get(location.href + "/" + window.name + '/viewSearch').then(function (adView) {
+        var searchField = document.getElementById('searchField');
+        searchField.value = window.name
         var element = document.getElementById('advertsList');
         element.innerHTML = ""
         if(adView.toString() == '[]'){
@@ -279,17 +287,17 @@ $(document).ready(function () {
         myAd.textContent = "Мои объявления"
         viewAuthorisedAdverts();
     }
-    if (window.name === '1'){
+    else if (window.name === '1'){
         myAd.textContent = "Все объявления"
         rec.textContent = "Рекомендации"
         viewMyAd()
     }
-    if (window.name === '2'){
+    else if (window.name === '2'){
         rec.textContent = "Все объявления"
         myAd.textContent = "Мои объявления"
         viewRecomend()
     }
-    if (window.name === '3'){
+    else{
         viewSearch()
     }
 })

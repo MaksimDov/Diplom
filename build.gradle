@@ -52,6 +52,8 @@ dependencies {
 	implementation 'net.iharder:base64:2.3.9'
 	implementation 'com.mortennobel:java-image-scaling:0.8.6'
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+	implementation 'org.springframework.boot:spring-boot-starter-mail:2.6.7'
+	implementation 'commons-codec:commons-codec:1.15'
 	runtimeOnly 'org.postgresql:postgresql'
 	compileOnly('org.projectlombok:lombok:1.18.10')
 	annotationProcessor('org.projectlombok:lombok:1.18.10')

@@ -174,4 +174,44 @@ public class ViewController {
 //        System.out.println(resultJson.toString());
         return resultJson.toString();
     }
+
+    @GetMapping("/{searchField}/viewSearch")
+    public String viewSearch(@PathVariable("searchField") String searchText, HttpServletRequest request, Model model) throws NoEntityException {
+        if (advertRepo.findAll() == null)
+            return "";
+        List<Advert> adverts = advertRepo.findAll().stream().sorted(Comparator.comparing(Advert::getId)).collect(Collectors.toList());
+        String userName;
+        String adName;
+        String adDescription;
+        String picPath;
+        String adCost;
+
+        JSONArray resultJson = new JSONArray();
+        for (Advert advert : adverts) {
+            if (advert.getName().contains(searchText)) {
+                JSONObject tempJson = new JSONObject();
+                Picture picture = picturesRepo.findTopByAdvertId(advert.getId());
+                picPath = picture.getPicture();
+                User userNow = userRepo.findById(advert.getUserId()).orElseThrow(() -> new NoEntityException(advert.getUserId()));
+                userName = userNow.getName();
+                adName = advert.getName();
+                adDescription = advert.getDescription();
+                adCost = advert.getCost();
+                List<Tags> tagsList = tagsRepo.findAllByAdvertId(advert.getId());
+                JSONArray jsonArray = new JSONArray();
+                for (int t = 0; t < tagsList.size(); ++t) {
+                    jsonArray.add(tagsList.get(t).getName());
+                }
+                tempJson.put("adId", advert.getId());
+                tempJson.put("userName", userName);
+                tempJson.put("adName", adName);
+                tempJson.put("adDescription", adDescription);
+                tempJson.put("adCost", adCost);
+                tempJson.put("picPath", picPath);
+                tempJson.put("tags", jsonArray);
+                resultJson.add(tempJson);
+            }
+        }
+        return resultJson.toString();
+    }
 }

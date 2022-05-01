@@ -2,6 +2,8 @@ package com.maksim.diplom.controller;
 
 import com.maksim.diplom.entity.User;
 import com.maksim.diplom.repos.UserRepo;
+import com.maksim.diplom.service.EmailService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +12,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Класс-контроллер для регистрации.
@@ -104,8 +108,39 @@ public class RegistrationController {
         LOG.info("User " + user.getLogin() + " is registered.");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
-        return "redirect:/authorization";
+//        return "redirect:/authorization";
+        return "redirect:/emailConfirm";
+
     }
 
+    @Autowired
+    private EmailService emailService;
 
+    @GetMapping("/emailConfirm")
+    public String sendEmail(){
+        String subject = "Подтверждение почты";
+        int minCode = 1000;
+        int maxCode = 9999;
+        int code = minCode + (int)(Math.random() * ((maxCode - minCode) + 1));
+        Long lastUserId = userRepo.getMaxId();
+        User user = userRepo.findById(lastUserId).orElse(new User());
+        userRepo.updateConfirm(passwordEncoder.encode(Integer.toString(code)), user.getId());
+//        userRepo.updateConfirm(DigestUtils.md5Hex(String.valueOf(code)), user.getId());
+        emailService.sendSimpleMessage(subject, "Код подтверждения: " + code, user.getEmail());
+        return "emailConfirm.html";
+    }
+
+    @PostMapping("/emailConfirm")
+    public String emailConfirm(@RequestParam("code") String codeFromForm) {
+        Long lastUserId = userRepo.getMaxId();
+        User user = userRepo.findById(lastUserId).orElse(new User());
+        if(!passwordEncoder.matches(codeFromForm, user.getConfirm())){
+            userRepo.deleteAllById(user.getId());
+            return "/signup.html";
+        }
+        else {
+            userRepo.updateConfirm("true", user.getId());
+            return "redirect:/authorization";
+        }
+    }
 }

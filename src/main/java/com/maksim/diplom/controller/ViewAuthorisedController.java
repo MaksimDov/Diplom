@@ -322,24 +322,19 @@ public class ViewAuthorisedController {
         return resultJson.toString();
     }
 
-    /**
-     * Обновляет список доступных (находящихся на стадии регистрации) комнат.
-     * Передает сформированный лист объектов через json пользователю.
-     *
-     * @param request to get Cookies [to find user by id]
-     * @param model   the model
-     * @return json (list rooms)
-     */
-    @GetMapping("/viewSearch")
-    public String viewSearch(HttpServletRequest request, Model model) throws NoEntityException {
+
+
+
+
+
+
+
+
+
+    @GetMapping("/{searchField}/viewSearch")
+    public String viewSearch(@PathVariable("searchField") String searchText, HttpServletRequest request, Model model) throws NoEntityException {
         if (advertRepo.findAll() == null)
             return "";
-//        Cookie[] cookies = request.getCookies();
-//        for (Cookie cookie : cookies)
-//            if (cookie.getName().equals("userId")) {
-//                cookies[0] = cookie;
-//                break;
-//            }
         List<Advert> adverts = advertRepo.findAll().stream().sorted(Comparator.comparing(Advert::getId)).collect(Collectors.toList());
         String userName;
         String adName;
@@ -349,8 +344,7 @@ public class ViewAuthorisedController {
 
         JSONArray resultJson = new JSONArray();
         for (Advert advert : adverts) {
-            if (advert.getName().contains("ВАЗ")) {
-                System.out.println(advert.getName());
+            if (advert.getName().contains(searchText)) {
                 JSONObject tempJson = new JSONObject();
                 Picture picture = picturesRepo.findTopByAdvertId(advert.getId());
                 picPath = picture.getPicture();
