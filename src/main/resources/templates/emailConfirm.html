@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<head>
+  <meta charset="UTF-8">
+  <title>Email confirm</title>
+</head>
+
+<body style="background-color: rgba(238,183,131,0.89)">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+          aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+        <a class="nav-link" href="/viewAdverts" style="color: white">Главная <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/signup" style="color: white">Вход <span class="sr-only">(current)</span></a>
+      </li>
+
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Я для красоты ¯\_(ツ)_/¯">
+    </form>
+  </div>
+</nav>
+<div style="width: 50vw; position: absolute; top: 3vh;">
+  <h1 h1-expand-lg th:inline="text"
+      style="font-size: 5vw; font-family: revert; margin-top: 15vh; margin-left: 36.3vw">Подтверждение почты</h1>
+</div>
+<div style="width: 20vw; height: 20vw; position: absolute; top: 17vw; left: 40vw; right: 50vw">
+  <form th:action="@{/emailConfirm}" method="post">
+    <div class="form-group">
+      <label>Введите код из сообщения на почте</label>
+      <input required type="text" class="form-control" name="code" placeholder="Код">
+    </div>
+    <button type="submit" class="btn btn-primary">Подтвердить</button>
+  </form>
+</div>
+</body>
+</html>
