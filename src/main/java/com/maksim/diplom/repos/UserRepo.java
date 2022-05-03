@@ -13,67 +13,88 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface UserRepo extends JpaRepository<User, Long> {
     /**
-     * Find by login or email user.
+     * Поиск по логину или почте.
      *
-     * @param login the login
-     * @param email       the email
-     * @return the user
+     * @param login логин пользователя
+     * @param email почта пользователя
+     * @return User
      */
     User findByLoginOrEmail(String login, String email);
 
     /**
-     * Find by login or id user.
+     * Поиск по логину или id пользователя.
      *
-     * @param login the login
-     * @param id       the user's id
-     * @return the user
+     * @param login логин
+     * @param id id пользователя
+     * @return ser
      */
     User findByLoginOrId(String login, Long id);
 
     /**
-     * Find user by email.
+     * Поиск по почте.
      *
-     * @param email the user's email
-     * @return the user
+     * @param email почта
+     * @return User
      */
     User findByEmail(String email);
 
     /**
-     * Find user by phone number.
+     * Поиск по номеру телефона.
      *
-     * @param phone the user's phone number
-     * @return the user
+     * @param phone номер телефона
+     * @return User
      */
     User findByPhoneNumber(String phone);
 
     /**
-     * Find user by email.
+     * Поиск по логину.
      *
-     * @param email the user's email
-     * @return the user
+     * @param login логин
+     * @return User
      */
-    User findByLogin(String email);
+    User findByLogin(String login);
 
     /**
-     * Find user by id.
+     * Поиск по id.
      *
-     * @param id the user's id
-     * @return the user
+     * @param id идентификатор пользователя
+     * @return User
      */
     User findById(long id);
 
+    /**
+     * Поиск максимального id
+     * @return maxId
+     */
     @Transactional
     @Query(nativeQuery = true, value = "select max(id) from users_table")
     Long getMaxId();
 
+    /**
+     * Удаление по id
+     * @param id идентификатор
+     */
     @Transactional
     void deleteAllById(Long id);
 
+    /**
+     * Обновление данных верификации
+     * @param confirm
+     * @param id
+     */
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value = "update users_table set confirm = ?1 where id = ?2")
     void updateConfirm(String confirm, Long id);
 
+    /**
+     * Обновление данных
+     * @param name
+     * @param login
+     * @param email
+     * @param phone_Number
+     * @param id
+     */
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value = "update users_table set name = ?1, login = ?2, email = ?3, phone_number = ?4 where id = ?5")

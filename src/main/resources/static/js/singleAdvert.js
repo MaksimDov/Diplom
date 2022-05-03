@@ -19,7 +19,6 @@ function viewSingle() {
         if (adView !== "") {
             $('#advertsList').empty();
             var element = document.getElementById('advertsList');
-            var fragment = document.createDocumentFragment();
             var setUserName, setAdName, setAdDescription, setTags, setAdId, owner;
             var parsed = JSON.parse(adView);
 
@@ -29,27 +28,15 @@ function viewSingle() {
             cost = parsed.adCost
             setAdName = parsed.adName;
             setAdDescription = parsed.adDescription;
-            setAdId = parsed.adId;
-            owner = parsed.owner;
             setTags = "";
 
             let block = document.createElement('div')
             block.className = 'blc'
             let picImg = document.createElement('img')
-            // picImg.src = path;
             let naz = document.createElement('h2')
             naz.textContent = setAdName
             let price = document.createElement('p6')
             price.textContent = "Цена: " + cost
-            // var button= document.createElement('button');
-            // button.className = "btn";
-            // button.type = "submit";
-            // button.id = setAdId;
-            // button.onclick = function () {
-            //     clickRoom(this);
-            // };
-            // button.textContent = "Удалить";
-
 
             let opis = document.createElement('p')
             opis.textContent = "Описание: " + setAdDescription
@@ -90,11 +77,6 @@ function viewSingle() {
     })
 }
 
-// function viewSinglePerSec() {
-//     setInterval(viewSingle, 150000);
-// }
-
 $(document).ready(function () {
     viewSingle();
-    // viewSinglePerSec();
 })

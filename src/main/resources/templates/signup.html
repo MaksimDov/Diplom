@@ -5,7 +5,7 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <head>
     <meta charset="UTF-8">
-    <title>Sign up</title>
+    <title>Регистрация</title>
 </head>
 
 <body style="background-color: rgba(238,183,131,0.89)">
@@ -38,26 +38,26 @@
 <div style="width: 20vw; height: 20vw; position: absolute; top: 17vw; left: 40vw; right: 50vw">
     <form th:action="@{/signup}" method="post">
         <div class="form-group">
-            <label>Name</label>
+            <label>Имя</label>
             <input required type="text" class="form-control" name="name" placeholder="Имя">
         </div>
         <div class="form-group">
-            <label>Email</label>
+            <label>Почта</label>
             <input required type="email" class="form-control" name="email" placeholder="Почта">
         </div>
         <div class="form-group">
-            <label>Phone</label>
+            <label>Телефон</label>
             <input required type="text" class="form-control" name="phoneNumber" placeholder="Телефон">
         </div>
         <div class="form-group">
-            <label>Login</label>
+            <label>Логин</label>
             <input required type="text" class="form-control" name="login" placeholder="Логин">
         </div>
         <div class="form-group">
-            <label>Password</label>
+            <label>Пароль</label>
             <input required type="password" class="form-control" name="password" placeholder="Пароль">
         </div>
-        <button type="submit" class="btn btn-primary">Кнопочка</button>
+        <button type="submit" class="btn btn-primary">Подтвердить</button>
         <input type="button" class="btn btn-primary" value="Авторизация" onclick="document.location='/authorization'">
     </form>
 </div>

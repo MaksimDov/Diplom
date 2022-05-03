@@ -10,8 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface UsersTagsRepo extends JpaRepository<UsersTags, Long> {
+    /**
+     * Поиск всех тегов пользователя
+     * @param usersId
+     * @return
+     */
     List<UsersTags> findAllByUsersId(Long usersId);
 
+    /**
+     * Удаление всех тэгов по id пользвателя
+     * @param usersId
+     */
     @Transactional
     void deleteAllByUsersId(Long usersId);
 

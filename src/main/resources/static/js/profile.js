@@ -11,28 +11,16 @@ function viewProfileData() {
             var emailElement = document.getElementById('email');
             emailElement.value = parsed.userEmail;
 
-            // var tagStr = "";
-            // for(let i = 0; i < parsed.tags.length; i++){
-            //     tagStr = tagStr + parsed.tags[i] + "; ";
-            // }
             var interesElement = document.getElementById('interes');
-            // interesElement.innerHTML = tagStr;
             for(let i=0;i<parsed.tags.length;++i){
                 var tagLi = document.createElement('li')
                 tagLi.innerHTML = parsed.tags[i];
                 interesElement.appendChild(tagLi)
             }
-            // var interesElement = document.getElementById('interes');
-            // interesElement.innerHTML = tagStr;
         }
     });
 }
 
-// function viewSinglePerSec() {
-//     setInterval(viewSingle, 150000);
-// }
-
 $(document).ready(function () {
     viewProfileData();
-    // viewSinglePerSec();
 })

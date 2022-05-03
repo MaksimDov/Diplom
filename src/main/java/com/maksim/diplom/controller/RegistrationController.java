@@ -3,22 +3,17 @@ package com.maksim.diplom.controller;
 import com.maksim.diplom.entity.User;
 import com.maksim.diplom.repos.UserRepo;
 import com.maksim.diplom.service.EmailService;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Класс-контроллер для регистрации.
@@ -41,17 +36,17 @@ public class RegistrationController {
     private UserRepo userRepo;
 
     /**
-     * Авторизация пользователя в нашей системе. Выполняет поиск пользователя в БД, проверяет, совпадают ли логин и пароль:
+     * Метод авторизации пользователя в системе.
+     * Авторизация пользователя системе выполняет поиск пользователя в БД, проверяет, совпадают ли логин и пароль:
      * - если да:  добавляет cookie с именем пользователя и его идентификатором переходит на домашнюю страницу [/home];
      * - если нет: возвращает на страницу авторизации [/authorization.html].
      *
-     * @param user     it receives data from forms
-     * @param model    to view page
-     * @param response to add Cookie
-     * @return /authorization.html or redirect:/home
+     * @param user     получает данные из формы
+     * @param response добавляет cookies
+     * @return /authorization.html или redirect:/home
      */
     @PostMapping("/")
-    public String signIn(User user, Model model, HttpServletResponse response) {
+    public String signIn(User user, HttpServletResponse response) {
         User userRepoByLoginOrEmail = userRepo.findByLoginOrEmail(user.getLogin(), user.getEmail());
         if (userRepoByLoginOrEmail == null || !passwordEncoder.matches(user.getPassword(), userRepoByLoginOrEmail.getPassword())) {
             LOG.error("Wrong username or password.");
@@ -66,25 +61,24 @@ public class RegistrationController {
     /**
      * Отображение страницы регистрации.
      *
-     * @param model to view page
-     * @return view signup.html
+     * @return отображает signup.html
      */
     @GetMapping("/signup")
-    public String signUp(Model model) {
+    public String signUp() {
         return "signup.html";
     }
 
     /**
-     * Регистрация пользователя в нашей системе. Выполняет поиск пользователя по логину в БД, проверяет, есть ли уже такое:
-     * - если нет:  добавляет пользователя в БД и переходит на страницу авторизации [/authorization];
+     * Метод регистрации пользователя.
+     * Регистрация пользователя системе выполняет поиск пользователя по логину в БД, проверяет, есть ли уже такое:
+     * - если нет:  добавляет пользователя в БД и переходит на страницу подтверждения почты [/emailConfirm];
      * - если да: возвращает на страницу регистрации [signup.html].
      *
-     * @param user  it receives data from forms
-     * @param model to view page
-     * @return view signup.html or redirect:/authorization
+     * @param user  получает данные из формы
+     * @return отображает signup.html или redirect:/authorization
      */
     @PostMapping("/signup")
-    public String signUpNewUser(User user, Model model) {
+    public String signUpNewUser(User user) {
         User userFromDb = userRepo.findByLogin(user.getLogin());
         if (userFromDb != null) {
             LOG.error("Login \"" + user.getName() + "\" already exist.");
@@ -108,14 +102,21 @@ public class RegistrationController {
         LOG.info("User " + user.getLogin() + " is registered.");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
-//        return "redirect:/authorization";
         return "redirect:/emailConfirm";
-
     }
 
+    /**
+     * Поле подключения сервиса почты
+     */
     @Autowired
     private EmailService emailService;
 
+    /**
+     * Метод генерации кода подтверждения и отправки его на почту.
+     * Генерирует четырехзначный код, сохраняет его в базу данных в закодированном виде.
+     * Отправляет код на почту с помощью сервиса почты(emailService).
+     * @return отображает emailConfirm.html
+     */
     @GetMapping("/emailConfirm")
     public String sendEmail(){
         String subject = "Подтверждение почты";
@@ -125,11 +126,19 @@ public class RegistrationController {
         Long lastUserId = userRepo.getMaxId();
         User user = userRepo.findById(lastUserId).orElse(new User());
         userRepo.updateConfirm(passwordEncoder.encode(Integer.toString(code)), user.getId());
-//        userRepo.updateConfirm(DigestUtils.md5Hex(String.valueOf(code)), user.getId());
         emailService.sendSimpleMessage(subject, "Код подтверждения: " + code, user.getEmail());
         return "emailConfirm.html";
     }
 
+    /**
+     * Метод проверки кода подтверждения.
+     * Сравнивает полученный код с отправленным.
+     *      -Если совпадают отмечает в базе данных, что почта подтверждена и переходит на страницу авторизации[/authorization]
+     *      -Если не совпадают возвращает на страницу регистрации[/signup]
+     *
+     * @param codeFromForm  получает данные из формы
+     * @return отображает signup.html или redirect:/authorization
+     */
     @PostMapping("/emailConfirm")
     public String emailConfirm(@RequestParam("code") String codeFromForm) {
         Long lastUserId = userRepo.getMaxId();

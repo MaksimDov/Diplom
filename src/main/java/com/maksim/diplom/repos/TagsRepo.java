@@ -10,9 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface TagsRepo extends JpaRepository <Tags, Long> {
-
+    /**
+     * Поиск всех тэгов объявления
+     * @param advertId id объявдения
+     * @return List<Tags>
+     */
     List<Tags> findAllByAdvertId(Long advertId);
 
+    /**
+     * Удаление всех тэгов объявления
+     * @param advertId id объявления
+     */
     @Modifying
     @Transactional
     void deleteAllByAdvertId(@Param("advert_id") Long advertId);

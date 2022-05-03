@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add_Advert</title>
+    <title>Добавление объявления</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
@@ -42,23 +42,23 @@
 <div style="width: 30vw; height: 20vw; position: absolute; top: 12vw; left: 35vw; right: 50vw">
     <form th:action="@{/saveAdvert}" method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <label>Pictures</label>
+            <label>Изображения</label>
             <input required type="file" class="form-control" id="picture" name="picture" multiple accept="image/*,image/jpeg" placeholder="Изображение">
         </div>
         <div class="form-group">
-            <label>Name</label>
+            <label>Название</label>
             <input required type="text" class="form-control" name="name" placeholder="Название">
         </div>
         <div class="form-group">
-            <label>Description</label>
+            <label>Описание</label>
             <textarea required type="text" class="form-control" name="description" placeholder="Описание"></textarea>
         </div>
         <div class="form-group">
-            <label>City</label>
+            <label>Город</label>
             <input required type="text" class="form-control" name="city" placeholder="Город">
         </div>
         <div class="form-group">
-            <label>Cost</label>
+            <label>Цена</label>
             <input required type="text" class="form-control" name="cost" placeholder="Цена">
         </div>
         <div class="form-group">

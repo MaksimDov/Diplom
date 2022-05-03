@@ -4,7 +4,7 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <head>
     <meta charset="UTF-8">
-    <title>Mafia</title>
+    <title>Профиль</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script type="text/javascript" src="/js/profile.js"></script>
 </head>
@@ -40,19 +40,19 @@
 <div style="width: 20vw; height: 20vw; position: absolute; top: 17vw; left: 40vw; right: 50vw">
     <form th:action="@{/changeUserData}" method="post">
         <div class="form-group">
-            <label>Name</label>
+            <label>Имя</label>
             <input required type="text" name="name" class="form-control" id="name">
         </div>
         <div class="form-group">
-            <label>Email</label>
+            <label>Почта</label>
             <input required type="text" name="email" class="form-control" id="email">
         </div>
         <div class="form-group">
-            <label>Phone number</label>
+            <label>Телефон</label>
             <input required type="text" name="phoneNumber" class="form-control" id="phoneNumber">
         </div>
         <div class="form-group">
-            <label>Login</label>
+            <label>Логин</label>
             <input required type="text" name="login" class="form-control" id="login">
         </div>
         <div class="form-group">

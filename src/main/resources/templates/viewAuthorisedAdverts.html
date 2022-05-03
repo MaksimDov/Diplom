@@ -5,7 +5,7 @@
 <!--<link rel="stylesheet" href="style.css">-->
 <head>
     <meta charset="UTF-8">
-    <title>Mafia</title>
+    <title>Главная</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script type="text/javascript" src="js/viewAuthorisedAdverts.js"></script>
 </head>
@@ -138,6 +138,77 @@
                 </form>
             </li>
         </ul>
+        <select id="select" onchange="changeSelect();">
+            <option value="ВСЕ КАТЕГОРИИ" style="background-color: gray">ВСЕ КАТЕГОРИИ</option>
+            <option value="ТРАНСПОРТ" style="background-color: gray">ТРАНСПОРТ</option>
+            <option value="Автомобили">Автомобили</option>
+            <option value="Мотоциклы и мототехника">Мотоциклы и мототехника</option>
+            <option value="Грузовики и спецтехника">Грузовики и спецтехника</option>
+            <option value="Водный транспорт">Водный транспорт</option>
+            <option value="Запчасти и аксесуары">Запчасти и аксесуары</option>
+            <option value="Инструменты">Инструменты</option>
+            <option value="Шины, диски, колеса">Шины, диски, колеса</option>
+            <option value="Аудио- и видеотехника">Аудио- и видеотехника</option>
+            <option value="Прицепы">Прицепы</option>
+            <option value="Тюнинг">Тюнинг</option>
+            <option value="Автокосметика и автохимия">Автокосметика и автохимия</option>
+            <option value="Противоугонные устройства">Противоугонные устройства</option>
+            <option value="Навигаторы">Навигаторы</option>
+
+            <option value="НЕДВИЖИМОСТЬ" style="background-color: gray">НЕДВИЖИМОСТЬ</option>
+            <option value="Квартиры">Квартиры</option>
+            <option value="Комнаты">Комнаты</option>
+            <option value="Дома, дачи, коттеджи">Дома, дачи, коттеджи</option>
+            <option value="Земельные участки">Земельные участки</option>
+            <option value="Гаражи и машиноместа">Гаражи и машиноместа</option>
+            <option value="Комерческая недвижимость">Комерческая недвижимость</option>
+            <option value="Недвижимость за рубежом">Недвижимость за рубежом</option>
+
+            <option value="РАБОТА" style="background-color: gray">РАБОТА</option>
+            <option value="Вакансии">Вакансии</option>
+            <option value="Резюме">Резюме</option>
+            <option value="УСЛУГИ" style="background-color: gray">УСЛУГИ</option>
+
+            <option value="ЛИЧНЫЕ ВЕЩИ" style="background-color: gray">ЛИЧНЫЕ ВЕЩИ</option>
+            <option value="Одежда, обувь, аксессуары">Одежда, обувь, аксессуары</option>
+            <option value="Детская одежда и обувь">Детская одежда и обувь</option>
+            <option value="Товары для детей и игрушки">Товары для детей и игрушки</option>
+            <option value="Красота и здоровье">Красота и здоровье</option>
+            <option value="Часы и украшения">Часы и украшения</option>
+
+            <option value="ДЛЯ ДОМА И ДАЧИ" style="background-color: gray">ДЛЯ ДОМА И ДАЧИ</option>
+            <option value="Ремонт и строительство">Ремонт и строительство</option>
+            <option value="Мебель и интерьер">Мебель и интерьер</option>
+            <option value="Бытовая техника">Бытовая техника</option>
+            <option value="Продукты питания">Продукты питания</option>
+            <option value="Растения">Растения</option>
+            <option value="Посуда и товары для кухни">Посуда и товары для кухни</option>
+
+            <option value="ЭЛЕКТРОНИКА" style="background-color: gray">ЭЛЕКТРОНИКА</option>
+            <option value="Компьютеры">Компьютеры</option>
+            <option value="Телевизоры">Телевизоры</option>
+            <option value="Мониторы">Мониторы</option>
+            <option value="Аудиотехника">Аудиотехника</option>
+            <option value="Видеотехника">Видеотехника</option>
+            <option value="Фототехника">Фототехника</option>
+            <option value="Телефоны">Телефоны</option>
+            <option value="Планшеты и электронные книги">Планшеты и электронные книги</option>
+            <option value="Аксессуары для электроники">Аксессуары для электроники</option>
+
+            <option value="ОХОТА И РЫБАЛКА" style="background-color: gray">ОХОТА И РЫБАЛКА</option>
+            <option value="МУЗЫКАЛЬНЫЕ ИНСТРУМЕНТЫ" style="background-color: gray">МУЗЫКАЛЬНЫЕ ИНСТРУМЕНТЫ</option>
+            <option value="КНИГИ" style="background-color: gray">КНИГИ</option>
+            <option value="СПОРТ" style="background-color: gray">СПОРТ</option>
+            <option value="ОТДЫХ" style="background-color: gray">ОТДЫХ</option>
+
+            <option value="ЖИВОТНЫЕ" style="background-color: gray">ЖИВОТНЫЕ</option>
+            <option value="Собаки">Собаки</option>
+            <option value="Кошки">Кошки</option>
+            <option value="Птицы">Птицы</option>
+            <option value="Рыбы">Рыбы</option>
+            <option value="Другие животные">Другие животные</option>
+            <option value="Товары для животных">Товары для животных</option>
+        </select>
         <div class="formSe">
             <input class="inputSe" type="text" id="searchField" name="searchField" placeholder="Искать здесь...">
             <button class="buttonSe" id="buttonSearch" type="submit" onclick="searchAdvert(searchField.value)"></button>

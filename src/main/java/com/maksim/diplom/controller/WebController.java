@@ -1,8 +1,9 @@
 package com.maksim.diplom.controller;
 
-import com.maksim.diplom.entity.Tags;
+import com.maksim.diplom.entity.User;
 import com.maksim.diplom.entity.UsersTags;
 import com.maksim.diplom.repos.AdvertRepo;
+import com.maksim.diplom.repos.UserRepo;
 import com.maksim.diplom.repos.UsersTagsRepo;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.log4j.Logger;
@@ -10,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import com.maksim.diplom.entity.User;
-import com.maksim.diplom.repos.UserRepo;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -40,25 +39,19 @@ public class WebController {
 
     /**
      * Отображение первой страницы.
-     *
-     * @param model    to view page
-     * @param response to add Cookie
      * @return view hello.html
      */
     @RequestMapping("/")
-    public String helloView(Model model, HttpServletResponse response) {
+    public String helloView() {
         return "redirect:/viewAdverts";
     }
 
     /**
-     * Отображение домашней страницы.
+     * Отображение главной страницы.
      * Так же осущствляет проверку на то, авторизировался ли пользователь:
-     * - если да:  отображает домашнюю страницу [home.html];
-     * - если нет: возвращает на страницу авторизации [redirect:/signup].
-     *
-     * @param model   to view page
-     * @param request to get Cookies
-     * @return view home.html or redirect:/signup
+     * @param model   для отображения
+     * @param request получение Cookies
+     * @return отобразить home.html или redirect:/signup
      */
     @RequestMapping("/home")
     public String homePageView(Model model, HttpServletRequest request) {
@@ -81,11 +74,20 @@ public class WebController {
 
 
 
+    /**
+     * Переход на страницу авторизации, если неавторизованный пользователь хочет добавить объявление
+     * @return redirect:/authorization
+     */
     @RequestMapping("/addAdvertFromHello")
-    public String addAdvertFromHelloPageView(Model model, HttpServletRequest request) {return "redirect:/authorization";}
+    public String addAdvertFromHelloPageView() {return "redirect:/authorization";}
 
+    /**
+     * Отображение страницы добавления объявлений
+     * @param request получение id пользователя
+     * @return addAdvert.html или redirect:/signup
+     */
     @RequestMapping("/addAdvertFromHome")
-    public String addAdvertFromHomePageView(Model model, HttpServletRequest request) {
+    public String addAdvertFromHomePageView(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies)
             if (cookie.getName().equals("userId")) {
@@ -119,30 +121,12 @@ public class WebController {
     }
 
     /**
-     * Отображение игровой комнаты.
-     * Так же осущствляет проверку на то, авторизировался ли пользователь, а также есть ли он в этой комнате:
-     * - если да:  отображает страницу игровой комнаты [letsPlay.html];
-     * - если нет: возвращает на страницу авторизации (пользователь не авторизован) [redirect:/signup]
-     * или на страницу со списком комнат [redirect:/playrooms].
-     *
-     * @param model      to view page
-     * @param advertId the room number
-     * @param request    to get Cookies
-     * @return view letsPlay.html redirect:/signup or redirect:/playrooms
+     * Отображение объявления.
+     * @param advertId id объявления
+     * @return отображает singleAdvert.html или redirect:/viewAdverts
      */
     @RequestMapping("/viewAdverts/{advertId}")
-    public String singleAdvert(Model model, @PathVariable(value = "advertId") Long advertId, HttpServletRequest request) {
-//        Cookie[] cookies = request.getCookies();
-//        for (Cookie cookie : cookies) {
-//            if (cookie.getName().equals("userId")) {
-//                cookies[0] = cookie;
-//                break;
-//            }
-//        }
-//        if (request.getCookies() == null)
-//            return "redirect:/signup";
-//        else if (!cookies[0].getName().equals("userId"))
-//            return "redirect:/signup";
+    public String singleAdvert(@PathVariable(value = "advertId") Long advertId) {
         if (advertRepo.findById(advertId).isPresent()) {
             return "singleAdvert.html";
         } else {
@@ -152,30 +136,12 @@ public class WebController {
     }
 
     /**
-     * Отображение игровой комнаты.
-     * Так же осущствляет проверку на то, авторизировался ли пользователь, а также есть ли он в этой комнате:
-     * - если да:  отображает страницу игровой комнаты [letsPlay.html];
-     * - если нет: возвращает на страницу авторизации (пользователь не авторизован) [redirect:/signup]
-     * или на страницу со списком комнат [redirect:/playrooms].
-     *
-     * @param model      to view page
-     * @param advertId the room number
-     * @param request    to get Cookies
-     * @return view letsPlay.html redirect:/signup or redirect:/playrooms
+     * Отображение объявления.
+     * @param advertId id объявления
+     * @return отображает singleAdvert.html или redirect:/viewAdverts
      */
     @RequestMapping("/viewAuthorisedAdverts/{advertId}")
-    public String singleAuthorisedAdvert(Model model, @PathVariable(value = "advertId") Long advertId, HttpServletRequest request) {
-//        Cookie[] cookies = request.getCookies();
-//        for (Cookie cookie : cookies) {
-//            if (cookie.getName().equals("userId")) {
-//                cookies[0] = cookie;
-//                break;
-//            }
-//        }
-//        if (request.getCookies() == null)
-//            return "redirect:/signup";
-//        else if (!cookies[0].getName().equals("userId"))
-//            return "redirect:/signup";
+    public String singleAuthorisedAdvert(@PathVariable(value = "advertId") Long advertId) {
         if (advertRepo.findById(advertId).isPresent()) {
             return "singleAuthorisedAdvert.html";
         } else {
@@ -184,8 +150,13 @@ public class WebController {
         }
     }
 
+    /**
+     * Отображение профиля.
+     * @param request получение id пользователя
+     * @return отображает profile.html или redirect:/signup
+     */
     @RequestMapping("/profile")
-    public String viewProfilePage(Model model, HttpServletRequest request) {
+    public String viewProfilePage(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies)
             if (cookie.getName().equals("userId")) {
@@ -200,16 +171,14 @@ public class WebController {
     }
 
     /**
-     * Регистрация пользователя в нашей системе. Выполняет поиск пользователя по логину в БД, проверяет, есть ли уже такое:
-     * - если нет:  добавляет пользователя в БД и переходит на страницу авторизации [/authorization];
-     * - если да: возвращает на страницу регистрации [signup.html].
+     * Изменение данных профиля пользователя
      *
-     * @param user  it receives data from forms
-     * @param model to view page
-     * @return view signup.html or redirect:/authorization
+     * @param user  получает данные из форм
+     * @param tags список интересных пользователю категорий
+     * @return redirect:/profile
      */
     @PostMapping("/changeUserData")
-    public String changeUserData(User user, @RequestParam("tags[]") String[] tags, Model model, HttpServletRequest request) {
+    public String changeUserData(User user, @RequestParam("tags[]") String[] tags, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies)
             if (cookie.getName().equals("userId")) {
@@ -221,27 +190,22 @@ public class WebController {
         User userFromDb = userRepo.findByLogin(user.getLogin());
         if (Objects.equals(userFromDb.getId(), userNow.getId())) userFromDb = null;
         if (userFromDb != null) {
-//            LOG.error("Login \"" + user.getName() + "\" already exist.");
             return "redirect:/profile";
         }
         userFromDb = userRepo.findByEmail(user.getEmail());
         if (Objects.equals(userFromDb.getId(), userNow.getId())) userFromDb = null;
         if (userFromDb != null) {
-//            LOG.error("Email \"" + user.getEmail() + "\" already exist.");
             return "redirect:/profile";
         }
         userFromDb = userRepo.findByPhoneNumber(user.getPhoneNumber());
         if (Objects.equals(userFromDb.getId(), userNow.getId())) userFromDb = null;
         if (userFromDb != null) {
-//            LOG.error("Phone number \"" + user.getPhoneNumber() + "\" already exist.");
             return "redirect:/profile";
         }
         EmailValidator emailValidator = EmailValidator.getInstance();
         if(!emailValidator.isValid(user.getEmail())){
-//            LOG.error("Wrong email address.");
             return "redirect:/profile";
         }
-//        LOG.info("User " + user.getLogin() + " is registered.");
         userRepo.updateDate(user.getName(), user.getLogin(), user.getEmail(), user.getPhoneNumber(), userNow.getId());
         usersTagsRepo.deleteAllByUsersId(userNow.getId());
         if (!tags[0].isEmpty()) {

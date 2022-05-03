@@ -6,9 +6,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
-
+/**
+ * Класс-конфигурация Mail config.
+ */
 @Configuration
 public class MailConfig {
+    /**
+     * Стандартный метод, который позволяет создавать простые автоматизированные контроллеры,
+     * предварительно настроенные с кодом состояния и/или видом.
+     */
     @Bean
     public JavaMailSender javaMailSender(){
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

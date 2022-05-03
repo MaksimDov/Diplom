@@ -18,11 +18,8 @@ import java.util.stream.Collectors;
 
 
 /**
- * Класс - REST контроллер, основной класс, который отвечает за ход игры, создание, удаление комнат,
- * присоединения к ним пользователей, их взаимодействие в чате и отображение списка доступных комнат.
+ * Класс - REST контроллер, который отвечает за отображение объявлений на главной странице.
  * Обращение к методам происходит через ajax-запросы.
- *
- * @version v1.0
  */
 @RestController
 @RequestMapping("/viewAuthorisedAdverts")
@@ -42,23 +39,15 @@ public class ViewAuthorisedController {
     private UsersTagsRepo usersTagsRepo;
 
     /**
-     * Обновляет список доступных (находящихся на стадии регистрации) комнат.
+     * Обновляет список доступных объявлений.
      * Передает сформированный лист объектов через json пользователю.
      *
-     * @param request to get Cookies [to find user by id]
-     * @param model   the model
-     * @return json (list rooms)
+     * @return json (список объявлений)
      */
     @GetMapping("/update")
-    public String viewAllRooms(HttpServletRequest request, Model model) throws NoEntityException {
+    public String viewAllRooms() throws NoEntityException {
         if (advertRepo.findAll() == null)
             return "";
-//        Cookie[] cookies = request.getCookies();
-//        for (Cookie cookie : cookies)
-//            if (cookie.getName().equals("userId")) {
-//                cookies[0] = cookie;
-//                break;
-//            }
         List<Advert> adverts = advertRepo.findAll().stream().sorted(Comparator.comparing(Advert::getId)).collect(Collectors.toList());
         String userName;
         String adName;
@@ -96,34 +85,25 @@ public class ViewAuthorisedController {
     /**
      * Отображение объявления.
      *
-     * @param advertId the room number
-     * @param request    to get Cookies [to find user by id]
-     * @param model      the model
-     * @return /playrooms/ + roomNumber
+     * @param advertId идентификатор объявления.
+     * @return "/viewAuthorisedAdverts/" + advertId
      */
     @GetMapping("/{advertId}/watchAdvert")
-    public String watchAd(@PathVariable("advertId") Long advertId, HttpServletRequest request, Model model) {
+    public String watchAd(@PathVariable("advertId") Long advertId) {
         if (advertRepo.findById(advertId) == null)
             return "This advert has been deleted.";
-//        Cookie[] cookies = request.getCookies();
-//        for (Cookie cookie : cookies)
-//            if (cookie.getName().equals("userId")) {
-//                cookies[0] = cookie;
-//                break;
-//            }
         return "/viewAuthorisedAdverts/" + advertId;
     }
 
     /**
-     * Метод формирования json содержимого комнат.
+     * Метод формирования json, содержащего данные объявления.
      *
-     * @param advertId the room number
-     * @param request    to get Cookies [to find user by id]
-     * @param model      the model
-     * @return /playrooms/ + roomNumber
+     * @param advertId идентификатор объявления
+     * @param request    получение Cookies [для получени идентификатора теущего пользователя]
+     * @return resultJson (данные объявления)
      */
     @GetMapping("/{advertId}/updateSingleAdvert")
-    public String viewSingleAd(@PathVariable("advertId") Long advertId, HttpServletRequest request, Model model) throws NoEntityException {
+    public String viewSingleAd(@PathVariable("advertId") Long advertId, HttpServletRequest request) throws NoEntityException {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies)
             if (cookie.getName().equals("userId")) {
@@ -167,12 +147,17 @@ public class ViewAuthorisedController {
         resultJson.put("adCost", advert.getCost());
         resultJson.put("tags", jsonArray);
         resultJson.put("pictures", picArray);
-//        System.out.println(resultJson.toString());
         return resultJson.toString();
     }
 
+    /**
+     * Метод изменения изображения.
+     *
+     * @param advertId идентификатор объявления
+     * @return resultJson (данные объявления)
+     */
     @GetMapping("/{advertId}/changePic")
-    public String changePic(@PathVariable("advertId") Long advertId, HttpServletRequest request, Model model) throws NoEntityException {
+    public String changePic(@PathVariable("advertId") Long advertId) throws NoEntityException {
         Advert advert = advertRepo.findById(advertId).orElseThrow(() -> new NoEntityException(advertId));
         JSONObject resultJson = new JSONObject();
 
@@ -183,23 +168,16 @@ public class ViewAuthorisedController {
         }
         resultJson.put("adId", advertId);
         resultJson.put("pictures", picArray);
-//        System.out.println(resultJson.toString());
         return resultJson.toString();
     }
 
     /**
-     * Метод удаления всех объектов комнат по номеру из БД, где пользователь является хостом
-     * (в противном случае не работает [/playrooms/ + roomNumber]).
-     * Удалить комнату возможно только в момент регистрации.
-     * После начала игры эта возможность пропадает до следующего времени регистрации после окончания текущей игры.
-     *
-     * @param advertId the room number
-     * @param request    to get Cookies [to find user by id]
-     * @param model      the model
-     * @return /playrooms or /playrooms/ + roomNumber
+     * Метод удаления всех объектов, относящихся к объявлению из БД, где пользователь является владельцем
+     * @param advertId идентификатор объявления
+     * @return "/viewAuthorisedAdverts"
      */
     @GetMapping("/{advertId}/delete")
-    public String deleteAdvert(@PathVariable("advertId") Long advertId, HttpServletRequest request, Model model) {
+    public String deleteAdvert(@PathVariable("advertId") Long advertId) {
         List<Picture> picList = picturesRepo.findAllByAdvertId(advertId);
         for(Picture pic : picList){
             File file = new File("./src/main/resources/static" + pic.getPicture());
@@ -213,15 +191,14 @@ public class ViewAuthorisedController {
     }
 
     /**
-     * Обновляет список доступных (находящихся на стадии регистрации) комнат.
+     * Обновляет список объявлений пользователя.
      * Передает сформированный лист объектов через json пользователю.
      *
-     * @param request to get Cookies [to find user by id]
-     * @param model   the model
-     * @return json (list rooms)
+     * @param request получение Cookies [для получения идентификатора польхователя]
+     * @return json (список объявлений)
      */
     @GetMapping("/viewMyAd")
-    public String viewMyAd(HttpServletRequest request, Model model) throws NoEntityException {
+    public String viewMyAd(HttpServletRequest request) throws NoEntityException {
         if (advertRepo.findAll() == null)
             return "";
         Cookie[] cookies = request.getCookies();
@@ -258,20 +235,18 @@ public class ViewAuthorisedController {
             tempJson.put("tags", jsonArray);
             resultJson.add(tempJson);
         }
-//        System.out.println(resultJson);
         return resultJson.toString();
     }
 
     /**
-     * Обновляет список доступных (находящихся на стадии регистрации) комнат.
+     * Обновляет список рекомендованых пользователю объявлений.
      * Передает сформированный лист объектов через json пользователю.
      *
-     * @param request to get Cookies [to find user by id]
-     * @param model   the model
-     * @return json (list rooms)
+     * @param request получение Cookies [для получения идентификатора пользователя]
+     * @return json (список объявлений)
      */
     @GetMapping("/viewRecomend")
-    public String viewRecomend(HttpServletRequest request, Model model) throws NoEntityException {
+    public String viewRecomend(HttpServletRequest request) throws NoEntityException {
         if (advertRepo.findAll() == null)
             return "";
         Cookie[] cookies = request.getCookies();
@@ -318,21 +293,16 @@ public class ViewAuthorisedController {
                 if (isAd) break;
             }
         }
-//        System.out.println(resultJson);
         return resultJson.toString();
     }
 
-
-
-
-
-
-
-
-
-
+    /**
+     * Обновляет список найденых с помощью поиска объявлений.
+     * Передает сформированный лист объектов через json пользователю.
+     * @return json (список объявлений)
+     */
     @GetMapping("/{searchField}/viewSearch")
-    public String viewSearch(@PathVariable("searchField") String searchText, HttpServletRequest request, Model model) throws NoEntityException {
+    public String viewSearch(@PathVariable("searchField") String searchText) throws NoEntityException {
         if (advertRepo.findAll() == null)
             return "";
         List<Advert> adverts = advertRepo.findAll().stream().sorted(Comparator.comparing(Advert::getId)).collect(Collectors.toList());
@@ -345,6 +315,59 @@ public class ViewAuthorisedController {
         JSONArray resultJson = new JSONArray();
         for (Advert advert : adverts) {
             if (advert.getName().contains(searchText)) {
+                JSONObject tempJson = new JSONObject();
+                Picture picture = picturesRepo.findTopByAdvertId(advert.getId());
+                picPath = picture.getPicture();
+                User userNow = userRepo.findById(advert.getUserId()).orElseThrow(() -> new NoEntityException(advert.getUserId()));
+                userName = userNow.getName();
+                adName = advert.getName();
+                adDescription = advert.getDescription();
+                adCost = advert.getCost();
+                List<Tags> tagsList = tagsRepo.findAllByAdvertId(advert.getId());
+                JSONArray jsonArray = new JSONArray();
+                for (int t = 0; t < tagsList.size(); ++t) {
+                    jsonArray.add(tagsList.get(t).getName());
+                }
+                tempJson.put("adId", advert.getId());
+                tempJson.put("userName", userName);
+                tempJson.put("adName", adName);
+                tempJson.put("adDescription", adDescription);
+                tempJson.put("adCost", adCost);
+                tempJson.put("picPath", picPath);
+                tempJson.put("tags", jsonArray);
+                resultJson.add(tempJson);
+            }
+        }
+        return resultJson.toString();
+    }
+
+    /**
+     * Обновляет список найденых с помощью поиска по категориям объявлений.
+     * Передает сформированный лист объектов через json пользователю.
+     * @return json (список объявлений)
+     */
+    @GetMapping("/{selectField}/viewSelect")
+    public String viewSelect(@PathVariable("selectField") String selectText) throws NoEntityException {
+        if (advertRepo.findAll() == null)
+            return "";
+        List<Advert> adverts = advertRepo.findAll().stream().sorted(Comparator.comparing(Advert::getId)).collect(Collectors.toList());
+        String userName;
+        String adName;
+        String adDescription;
+        String picPath;
+        String adCost;
+
+        JSONArray resultJson = new JSONArray();
+        for (Advert advert : adverts) {
+            boolean isAdd = false;
+            List<Tags> tags = tagsRepo.findAllByAdvertId(advert.getId());
+            for (Tags tag : tags){
+                if (Objects.equals(tag.getName(), selectText)){
+                    isAdd = true;
+                    break;
+                }
+            }
+            if (isAdd) {
                 JSONObject tempJson = new JSONObject();
                 Picture picture = picturesRepo.findTopByAdvertId(advert.getId());
                 picPath = picture.getPicture();
